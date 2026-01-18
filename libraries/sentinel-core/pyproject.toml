@@ -1,0 +1,19 @@
+[project]
+name = "sentinel-core"
+version = "0.1.0"
+description = "Transaction validation engine"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.0",
+    "loguru>=0.7",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.0"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
