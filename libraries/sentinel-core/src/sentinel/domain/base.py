@@ -27,6 +27,18 @@ class BaseIngestor(ABC):
         """
         pass
 
+# TODO: Write custom context manager for reading file and returning iterator
+
+class OpenIterate:
+
+    def __init__(self):
+
+    def __enter__(self):
+
+    def __exit__(self):
+
+
+class CSVIngestor(BaseIngestor):
 
 
 
