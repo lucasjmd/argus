@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Iterator
 
 class BaseIngestor(ABC):
     """
@@ -10,7 +11,24 @@ class BaseIngestor(ABC):
     Args:
         None
 
-    Returns:
+    Attributes:
+        None
     """
     @abstractmethod
-    def read_file
+    def get_transactions(self) -> Iterator:
+        """
+        This abstract method allows a source of transaction to be read.
+
+        Args:
+            None
+
+        Returns:
+            An iterator object consisting of transactions.
+        """
+        pass
+
+
+
+
+
+
