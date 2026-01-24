@@ -1,5 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Iterator
+from os import getcwd
+from sys import path
+import csv
+
+PAYSIM_DIR = path[1]
+
 
 class BaseIngestor(ABC):
     """
@@ -20,32 +26,30 @@ class BaseIngestor(ABC):
     def __enter__(self):
         pass
 
+        @abstractmethod
+        def get_transcations
+
     @abstractmethod
     def __exit(self):
         pass
 
-    @abstractmethod
-    def __iter__(self):
-        pass
-
-    @abstractmethod
-    def __next__(self):
-        pass
-
-    @abstractmethod
-    def get_transactions(self) -> Iterator:
-        """
-        This abstract method allows a source of transaction to be read.
-
-        Args:
-            None
-
-        Returns:
-            An iterator object consisting of transactions.
-        """
-        pass
 
 class CSVIngestor(BaseIngestor):
+
+    def __init__(self, csv_file):
+        self.csv_file = csv_file
+
+    def __enter__(self):
+        print("Connecting to CSV file...")
+        self.file_obj = open(f'{PAYSIM_DIR}/{self.csv_file}', 'r')
+        self.reader_obj = reader(file_obj)
+
+        def get_transactions(self,reader_obj):
+            for _ in reader_obj:
+                print(_)
+
+    def __exit__(self):
+        print("Closing down connection to CSV file...")
 
 
 
