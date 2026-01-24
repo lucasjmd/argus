@@ -5,8 +5,9 @@ class BaseIngestor(ABC):
     """
     Abstract base class for ingesting transaction data in various forms.
 
-    This is the base class for various planned forms of data ingestion classes, e.g.: complete CSV's, Kafka streams,
-    SQL databases, etc. It defines  abstract methods that requires concrete classes to specify further.
+    This is the base class for various database connection subclasses.
+    It is both set up as a context manager and an iterator, as well as having other additional
+    methods.
 
     Args:
         None
@@ -14,6 +15,23 @@ class BaseIngestor(ABC):
     Attributes:
         None
     """
+
+    @abstractmethod
+    def __enter__(self):
+        pass
+
+    @abstractmethod
+    def __exit(self):
+        pass
+
+    @abstractmethod
+    def __iter__(self):
+        pass
+
+    @abstractmethod
+    def __next__(self):
+        pass
+
     @abstractmethod
     def get_transactions(self) -> Iterator:
         """
@@ -27,18 +45,8 @@ class BaseIngestor(ABC):
         """
         pass
 
-# TODO: Write custom context manager for reading file and returning iterator
-
-class OpenIterate:
-
-    def __init__(self):
-
-    def __enter__(self):
-
-    def __exit__(self):
-
-
 class CSVIngestor(BaseIngestor):
+
 
 
 
