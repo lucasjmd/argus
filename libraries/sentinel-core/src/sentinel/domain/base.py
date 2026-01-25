@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Iterator
 from os import getcwd
 from sys import path
-from csv import reader
+import csv
+import time
 
 PAYSIM_DIR = path[1]
 
@@ -38,7 +39,7 @@ class CSVIngestor(BaseIngestor):
     def __enter__(self):
         print("Connecting to CSV file...")
         self.file_obj = open(f'{PAYSIM_DIR}/{self.csv_file}', 'r')
-        self.reader_obj = reader(self.file_obj)
+        self.reader_obj = csv.reader(self.file_obj)
         return self.reader_obj
 
     # def get_transactions(self):
@@ -52,16 +53,26 @@ class CSVIngestor(BaseIngestor):
         else:
             return False
 
+        self.reader_obj.close()
+
         print("Closing down connection to CSV file...")
+
 
 # csvingestor_object = CSVIngestor('paysim_dataset.csv')
 
-with CSVIngestor('paysim_dataset.csv') as dataset:
-    for transaction in dataset:
-        print(transaction)
-
 # with csvingestor_object as transaction:
 #     print(transaction)
+
+start = time.time()
+with CSVIngestor('paysim_dataset.csv') as dataset:
+    for transaction in dataset:
+       print(transaction)
+end = time.time()
+
+length = end - start
+print(f'Iterating through the CSV file took {length} seconds.')
+
+
 
 
 
