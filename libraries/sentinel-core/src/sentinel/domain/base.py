@@ -2,10 +2,9 @@ from abc import ABC, abstractmethod
 from typing import Iterator
 from os import getcwd
 from sys import path
-import csv
+from csv import reader
 
 PAYSIM_DIR = path[1]
-
 
 class BaseIngestor(ABC):
     """
@@ -26,11 +25,8 @@ class BaseIngestor(ABC):
     def __enter__(self):
         pass
 
-        @abstractmethod
-        def get_transcations
-
     @abstractmethod
-    def __exit(self):
+    def __exit__(self):
         pass
 
 
@@ -42,15 +38,30 @@ class CSVIngestor(BaseIngestor):
     def __enter__(self):
         print("Connecting to CSV file...")
         self.file_obj = open(f'{PAYSIM_DIR}/{self.csv_file}', 'r')
-        self.reader_obj = reader(file_obj)
+        self.reader_obj = reader(self.file_obj)
+        return self.reader_obj
 
-        def get_transactions(self,reader_obj):
-            for _ in reader_obj:
-                print(_)
+    # def get_transactions(self):
+    #     for _ in self.reader_obj:
+    #         return _
 
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        if exc_type is StopIteration:
+            print('Reached the end of the database.')
+            return True
+        else:
+            return False
+
         print("Closing down connection to CSV file...")
 
+# csvingestor_object = CSVIngestor('paysim_dataset.csv')
+
+with CSVIngestor('paysim_dataset.csv') as dataset:
+    for transaction in dataset:
+        print(transaction)
+
+# with csvingestor_object as transaction:
+#     print(transaction)
 
 
 
