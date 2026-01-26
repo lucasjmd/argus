@@ -63,18 +63,14 @@ class CSVIngestor(BaseIngestor):
 # with csvingestor_object as transaction:
 #     print(transaction)
 
-start = time.time()
-with CSVIngestor('paysim_dataset.csv') as dataset:
-    for transaction in dataset:
-       print(transaction)
-end = time.time()
 
-length = end - start
-print(f'Iterating through the CSV file took {length} seconds.')
+if __name__ == '__main__':
+    start = time.time()
+    with CSVIngestor('paysim_dataset.csv') as dataset:
+        for transaction in dataset:
+           print(transaction)
+    end = time.time()
 
-
-
-
-
-
+    length = end - start
+    print(f'Iterating through the CSV file took {length} seconds.')
 
