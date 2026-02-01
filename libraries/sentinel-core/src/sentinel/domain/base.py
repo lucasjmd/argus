@@ -5,7 +5,8 @@ from sys import path
 import csv
 import time
 
-PAYSIM_DIR = path[1]
+PAYSIM_DIR = '/home/lucas/github/argus/data/'
+
 
 class BaseIngestor(ABC):
     """
@@ -27,50 +28,47 @@ class BaseIngestor(ABC):
         pass
 
     @abstractmethod
+    def get_transactions(self):
+        pass
+
+    @abstractmethod
     def __exit__(self):
         pass
 
 
 class CSVIngestor(BaseIngestor):
 
-    def __init__(self, csv_file):
-        self.csv_file = csv_file
+    def __init__(self, data_source):
+        self.data_source = data_source
 
     def __enter__(self):
-        print("Connecting to CSV file...")
-        self.file_obj = open(f'{PAYSIM_DIR}/{self.csv_file}', 'r')
-        self.reader_obj = csv.reader(self.file_obj)
-        return self.reader_obj
+        print("Connecting to batch...")
+        self.data_obj = open(f'{PAYSIM_DIR}/{self.data_source}', 'r')
+        self.reader_obj = csv.reader(self.data_obj)
+        return self
 
-    # def get_transactions(self):
-    #     for _ in self.reader_obj:
-    #         return _
+    def get_transactions(self):
+        for row in self.reader_obj:
+            yield row
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if exc_type is StopIteration:
-            print('Reached the end of the database.')
+            print('Reached the end of the batch.')
+            self.data_obj.close()
             return True
         else:
+            self.data_obj.close()
+            print("Encountered an error in reading the batch.")
             return False
 
-        self.reader_obj.close()
-
-        print("Closing down connection to CSV file...")
 
 
-# csvingestor_object = CSVIngestor('paysim_dataset.csv')
+# class StreamIngestor(BaseIngestor):
 
-# with csvingestor_object as transaction:
-#     print(transaction)
-
+CSV_object = CSVIngestor('paysim_dataset.csv')
 
 if __name__ == '__main__':
-    start = time.time()
-    with CSVIngestor('paysim_dataset.csv') as dataset:
-        for transaction in dataset:
-           print(transaction)
-    end = time.time()
-
-    length = end - start
-    print(f'Iterating through the CSV file took {length} seconds.')
+    with CSVIngestor('paysim_dataset.csv') as data:
+        for transaction in data.get_transactions():
+            print(transaction)
 
