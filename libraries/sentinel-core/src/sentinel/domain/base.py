@@ -68,32 +68,36 @@ class StreamIngestor(BaseIngestor):
 
     def __enter__(self):
         print("Connecting to stream...")
-        self.data_obj = open(f'{PAYSIM_DIR}/{self.data_source}', 'r')
-        self.reader_obj = csv.reader(self.data_obj)
+        self.gen_obj = stream_simulator(f'{self.data_source}')
         return self
 
     def get_transactions(self):
-        for row in self.reader_obj:
+        for row in self.gen_obj:
             yield row
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if exc_type is StopIteration:
-            print('Reached the end of the batch.')
-            self.data_obj.close()
+            print('The stream has been interrupted.')
             return True
+
         else:
-            self.data_obj.close()
             print("Encountered an error in reading the batch.")
             return False
 
 
 def stream_simulator(data):
-    while True:
-        data_obj = open(f'{PAYSIM_DIR}/{data}', 'r')
-        reader_obj = csv.reader(data_obj)
+    if not data.endswith('.csv'):
+        raise TypeError
 
-        for row in reader_obj:
-            yield row
+    else:
+        while True:
+            data_obj = open(f'{PAYSIM_DIR}/{data}', 'r')
+            reader_obj = csv.reader(data_obj)
+
+            for row in reader_obj:
+                yield row
+
+            data_obj.close()
 
 
 
@@ -102,8 +106,11 @@ if __name__ == '__main__':
     #     for transaction in data.get_transactions():
     #         print(transaction)
 
-    stream = stream_simulator('paysim_dataset.csv')
+    # stream = stream_simulator('paysim_dataset.csx')
+    # for tx in stream:
+    #     print(tx)
 
-    for tx in stream:
-        print(tx)
+    with StreamIngestor('paysim_dataset.csv') as data:
+        for tx in data.get_transactions():
+            print(tx)
 
