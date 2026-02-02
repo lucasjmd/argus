@@ -13,14 +13,15 @@ class BaseIngestor(ABC):
     Abstract base class for ingesting transaction data in various forms.
 
     This is the base class for various database connection subclasses.
-    It is both set up as a context manager and an iterator, as well as having other additional
-    methods.
+    It is meant as a contract that defines the form concrete classes (the specific source ingestors)
+    will have to follow. It is also set up to allow it to be used as a custom context manager.
 
     Args:
         None
 
     Attributes:
         None
+
     """
 
     @abstractmethod
@@ -37,6 +38,20 @@ class BaseIngestor(ABC):
 
 
 class CSVIngestor(BaseIngestor):
+    """
+    Concrete ingestor engine class for ingesting 'batch'  transaction data coming from a .csv file.
+
+    This concrete version of the BaseIngestor abstract base class specifies how batch or static data has to be
+    ingested. It can be used as a context manager and offers a graceful file exit. The data is presented to the caller
+    via a generator object that can be iterated through.
+
+    Args:
+        data_source (str): The csv file representing the batch or static data.
+
+    Attributes:
+        None
+
+    """
 
     def __init__(self, data_source):
         self.data_source = data_source
@@ -47,7 +62,13 @@ class CSVIngestor(BaseIngestor):
         self.reader_obj = csv.reader(self.data_obj)
         return self
 
-    def get_transactions(self):
+    def get_transactions(self) -> Generator[List[str], None, None]:
+        """
+        Generator that yields each row of the csv.
+        It defines no .send method or finishing return statement.
+
+        Yields: List[str]
+        """
         for row in self.reader_obj:
             yield row
 
@@ -60,6 +81,7 @@ class CSVIngestor(BaseIngestor):
             self.data_obj.close()
             print("Encountered an error in reading the batch.")
             return False
+
 
 class StreamIngestor(BaseIngestor):
 
@@ -75,6 +97,7 @@ class StreamIngestor(BaseIngestor):
         for row in self.gen_obj:
             yield row
 
+    #TODO: Add a graceful file close down.
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if exc_type is StopIteration:
             print('The stream has been interrupted.')
@@ -110,7 +133,7 @@ if __name__ == '__main__':
     # for tx in stream:
     #     print(tx)
 
-    with StreamIngestor('paysim_dataset.csv') as data:
-        for tx in data.get_transactions():
-            print(tx)
+    # with StreamIngestor('paysim_dataset.csv') as data:
+    #     for tx in data.get_transactions():
+    #         print(tx)
 
