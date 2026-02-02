@@ -4,9 +4,9 @@ from os import getcwd
 from sys import path
 import csv
 import time
+from pathlib import Path
 
-PAYSIM_DIR = '/home/lucas/github/argus/data/'
-
+PAYSIM_DIR = '/home/lucas/github/argus/data'
 
 class BaseIngestor(ABC):
     """
@@ -52,12 +52,17 @@ class CSVIngestor(BaseIngestor):
         None
 
     """
+
     def __init__(self, data_source: str):
         self.data_source = data_source
 
+        base_dir = Path(PAYSIM_DIR)
+        filestring = Path(data_source)
+        self.full_path = base_dir / filestring
+
     def __enter__(self):
         print("Connecting to batch...")
-        self.data_obj = open(f'{PAYSIM_DIR}/{self.data_source}', 'r')
+        self.data_obj = open(f'{self.full_path}', 'r')
         return self
 
     def get_transactions(self) -> Generator[list[str], None, None]:
@@ -139,12 +144,17 @@ def stream_simulator(data: str) -> Generator[list[str], None, None]:
         List[str]: A generator object that can iterate continuously through the csv rows.
 
     """
+
+    base_dir = Path(PAYSIM_DIR)
+    filestring = Path(data)
+    full_path = base_dir / filestring
+
     if not data.endswith('.csv'):
         raise TypeError
 
     else:
         while True:
-            data_obj = open(f'{PAYSIM_DIR}/{data}', 'r')
+            data_obj = open(f'{full_path}', 'r')
             reader_obj = csv.reader(data_obj)
 
             for row in reader_obj:
@@ -158,10 +168,6 @@ if __name__ == '__main__':
     with CSVIngestor('paysim_dataset.csv') as data:
         for transaction in data.get_transactions():
             print(transaction)
-
-    # stream = stream_simulator('paysim_dataset.csx')
-    # for tx in stream:
-    #     print(tx)
 
     # with StreamIngestor('paysim_dataset.csv') as data:
     #     for tx in data.get_transactions():
