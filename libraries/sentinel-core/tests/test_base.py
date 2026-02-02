@@ -9,5 +9,6 @@ def test_instantiate_csvingestor():
     CSVIngestor(1)
 
 def test_stream_sim_type_raise():
-    with pytest.raises(TypeError):
-        stream_simulator('test.xlsx')
+    with pytest.raises(TypeError) as e:
+        generator_obj = stream_simulator('test.xlsx')
+        next(generator_obj)
