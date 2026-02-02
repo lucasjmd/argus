@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterator
+from typing import Iterator, Generator
 from os import getcwd
 from sys import path
 import csv
@@ -59,16 +59,16 @@ class CSVIngestor(BaseIngestor):
     def __enter__(self):
         print("Connecting to batch...")
         self.data_obj = open(f'{PAYSIM_DIR}/{self.data_source}', 'r')
-        self.reader_obj = csv.reader(self.data_obj)
         return self
 
-    def get_transactions(self) -> Generator[List[str], None, None]:
+    def get_transactions(self) -> Generator[list[str], None, None]:
         """
         Generator that yields each row of the csv.
         It defines no .send method or finishing return statement.
 
         Yields: List[str]
         """
+        self.reader_obj = csv.reader(self.data_obj)
         for row in self.reader_obj:
             yield row
 
@@ -125,9 +125,9 @@ def stream_simulator(data):
 
 
 if __name__ == '__main__':
-    # with CSVIngestor('paysim_dataset.csv') as data:
-    #     for transaction in data.get_transactions():
-    #         print(transaction)
+    with CSVIngestor('paysim_dataset.csv') as data:
+        for transaction in data.get_transactions():
+            print(transaction)
 
     # stream = stream_simulator('paysim_dataset.csx')
     # for tx in stream:
