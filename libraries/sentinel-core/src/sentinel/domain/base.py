@@ -52,8 +52,7 @@ class CSVIngestor(BaseIngestor):
         None
 
     """
-
-    def __init__(self, data_source):
+    def __init__(self, data_source: str):
         self.data_source = data_source
 
     def __enter__(self):
@@ -66,7 +65,8 @@ class CSVIngestor(BaseIngestor):
         Generator that yields each row of the csv.
         It defines no .send method or finishing return statement.
 
-        Yields: List[str]
+        Yields:
+            List[str]: A generator object that can iterate through the rows of the batch/static data.
         """
         self.reader_obj = csv.reader(self.data_obj)
         for row in self.reader_obj:
@@ -84,8 +84,21 @@ class CSVIngestor(BaseIngestor):
 
 
 class StreamIngestor(BaseIngestor):
+    """
+    Concrete ingestor engine class for ingesting stream transaction data.
 
-    def __init__(self, data_source):
+    This concrete version of the BaseIngestor abstract base class specifies how stream data has to be
+    ingested. It can be used as a context manager. The data is presented to the caller via an infinite generator
+    object that can be iterated through.
+
+    Args:
+        data_source (str): The connection representing the stream of data.
+
+    Attributes:
+        None
+
+    """
+    def __init__(self, data_source: str):
         self.data_source = data_source
 
     def __enter__(self):
@@ -93,7 +106,14 @@ class StreamIngestor(BaseIngestor):
         self.gen_obj = stream_simulator(f'{self.data_source}')
         return self
 
-    def get_transactions(self):
+    def get_transactions(self) -> Generator[list[str], None, None]:
+        """
+        Generator that yields each row of a stream of data.
+        It defines no .send method or finishing return statement.
+
+        Yields:
+            List[str]: A generator object that can iterate through the rows of the stream data.
+        """
         for row in self.gen_obj:
             yield row
 
@@ -108,7 +128,17 @@ class StreamIngestor(BaseIngestor):
             return False
 
 
-def stream_simulator(data):
+def stream_simulator(data: str) -> Generator[list[str], None, None]:
+    """
+    Simulates an infinite 'stream' of the data from the csv file by looping through it continuously.
+    It yields a generator object and defines no .send method or finishing return statement.
+
+    Args:
+        str: The name of the csv file.
+    Yields:
+        List[str]: A generator object that can iterate continuously through the csv rows.
+
+    """
     if not data.endswith('.csv'):
         raise TypeError
 
