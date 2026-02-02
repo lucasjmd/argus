@@ -1,5 +1,5 @@
 import pytest
-from sentinel.domain.base import BaseIngestor, CSVIngestor
+from sentinel.domain.base import BaseIngestor, CSVIngestor, stream_simulator
 
 def test_cannot_instantiate_abc():
     with pytest.raises(TypeError) as e:
@@ -7,3 +7,7 @@ def test_cannot_instantiate_abc():
 
 def test_instantiate_csvingestor():
     CSVIngestor(1)
+
+def test_stream_sim_type_raise():
+    with pytest.raises(TypeError):
+        stream_simulator('test.xlsx')
