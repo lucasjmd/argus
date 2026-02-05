@@ -3,6 +3,7 @@ from typing import Iterator, Generator
 from os import getcwd
 from sys import path
 import csv
+from time import sleep
 import time
 from pathlib import Path
 
@@ -103,8 +104,9 @@ class StreamIngestor(BaseIngestor):
         None
 
     """
-    def __init__(self, data_source: str):
-        self.data_source = data_source
+    def __init__(self, data_source: str, throttle: bool = True):
+        self.data_source    = data_source
+        self.throttle       = throttle
 
     def __enter__(self):
         print("Connecting to stream...")
@@ -120,6 +122,8 @@ class StreamIngestor(BaseIngestor):
             List[str]: A generator object that can iterate through the rows of the stream data.
         """
         for row in self.gen_obj:
+            if self.throttle:
+                time.sleep(0.2)
             yield row
 
     #TODO: Add a graceful file close down.
@@ -165,11 +169,11 @@ def stream_simulator(data: str) -> Generator[list[str], None, None]:
 
 
 if __name__ == '__main__':
-    with CSVIngestor('paysim_dataset.csv') as data:
-        for transaction in data.get_transactions():
-            print(transaction)
+    # with CSVIngestor('paysim_dataset.csv') as data:
+    #     for transaction in data.get_transactions():
+    #         print(transaction)
 
-    # with StreamIngestor('paysim_dataset.csv') as data:
-    #     for tx in data.get_transactions():
-    #         print(tx)
+    with StreamIngestor('paysim_dataset.csv', True) as data:
+        for tx in data.get_transactions():
+            print(tx)
 
