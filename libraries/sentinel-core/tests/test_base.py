@@ -54,6 +54,15 @@ def test_nonexistant_file_stream_sim():
 # Empty data
 #TODO: empty data stream test
 
+def test_empty_stream_data(tmp_path):
+    unit_test_data_dir = tmp_path / 'data'
+    unit_test_data_dir.mkdir()
+    test_filestring = unit_test_data_dir / 'test_tx_data.csv'
+    test_filestring.write_text('')
+
+    stream = stream_simulator(str(test_filestring))
+    next(stream)
+
 def test_empty_batch_data(tmp_path):
     unit_test_data_dir = tmp_path / 'data'
     unit_test_data_dir.mkdir()
@@ -112,7 +121,9 @@ def test_stream_sim_loop(tmp_path):
     assert results[0] == results[2]
     assert results[1] == results[3]
 
-
+# def test_stream_sim_headers(tmp_path):
+#
+# def test_batch_ingestor_no_headers(tmp_path):
 
 ## INTEGRATION TESTS
 
