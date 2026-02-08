@@ -38,6 +38,17 @@ def test_cannot_instantiate_abc():
     with pytest.raises(TypeError) as e:
         BaseIngestor()
 
+def test_stream_sim_no_source():
+    with pytest.raises(ValueError):
+        stream = stream_simulator('')
+        next(stream)
+
+def test_nonexistant_file_stream_sim():
+    with pytest.raises(FileNotFoundError):
+        stream = stream_simulator('non_data.csv')
+        next(stream)
+
+
 # Empty data
 #TODO: empty data stream test
 
