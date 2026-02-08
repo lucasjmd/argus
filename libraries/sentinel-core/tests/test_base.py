@@ -4,7 +4,9 @@ from pathlib import Path
 import psutil
 import itertools
 
-row_content = '1,PAYMENT,9839.64,C1231006815,170136.0,160296.36,M1979787155,0.0,0.0,0,0'
+row_sample_1 = '1,PAYMENT,9839.64,C1231006815,170136.0,160296.36,M1979787155,0.0,0.0,0,0'
+row_sample_2 = '2,TRANSFER,1234.56,C840083671,1234567.1,89101112.13,M408069119,1.0,0.2,3,4'
+
 
 ## UNIT TESTS
 
@@ -82,9 +84,9 @@ def test_csv_ingestor_close(tmp_path):
     unit_test_data_dir = tmp_path / 'data'
     unit_test_data_dir.mkdir()
     test_filestring = unit_test_data_dir / 'test_tx_data.csv'
-    test_filestring.write_text(row_content)
-    test_filestring.write_text(row_content)
-    test_filestring.write_text(row_content)
+    test_filestring.write_text(row_sample_1)
+    test_filestring.write_text(row_sample_1)
+    test_filestring.write_text(row_sample_1)
 
     batch_obj = CSVIngestor(str(test_filestring))
 
@@ -94,6 +96,23 @@ def test_csv_ingestor_close(tmp_path):
 
     assert data.file_obj.closed
 
+# correct loop rows stream sim
+
+def test_stream_sim_loop(tmp_path):
+    unit_test_data_dir = tmp_path / 'data'
+    unit_test_data_dir.mkdir()
+    test_filestring = unit_test_data_dir / 'test_tx_data.csv'
+    test_filestring.write_text(row_sample_2)
+    test_filestring.write_text(row_sample_2)
+
+    stream = stream_simulator(str(test_filestring))
+    results = list(itertools.islice(stream, 4))
+
+    assert len(results) == 4
+    assert results[0] == results[2]
+    assert results[1] == results[3]
+
+
 
 ## INTEGRATION TESTS
 
@@ -102,7 +121,7 @@ def test_stream_sim_data_read(tmp_path):
     unit_test_data_dir = tmp_path / 'data'
     unit_test_data_dir.mkdir()
     test_filestring = unit_test_data_dir / 'test_tx_data.csv'
-    test_filestring.write_text(row_content)
+    test_filestring.write_text(row_sample_1)
 
     gen_obj = stream_simulator(str(test_filestring))
 
