@@ -35,6 +35,18 @@ def test_cannot_instantiate_abc():
     with pytest.raises(TypeError) as e:
         BaseIngestor()
 
+def test_empty_data(tmp_path):
+    unit_test_data_dir = tmp_path / 'data'
+    unit_test_data_dir.mkdir()
+    test_filestring = unit_test_data_dir / 'test_tx_data.csv'
+    test_filestring.write_text('')
+
+    batch_obj = CSVIngestor(str(test_filestring))
+
+    with CSVIngestor(str(test_filestring)) as data:
+        for transaction in data.get_transactions():
+            print(transaction)
+
 # correct closure of files
 
 def test_csv_ingestor_close(tmp_path):
@@ -52,6 +64,7 @@ def test_csv_ingestor_close(tmp_path):
             pass
 
     assert data.file_obj.closed
+
 
 
 
