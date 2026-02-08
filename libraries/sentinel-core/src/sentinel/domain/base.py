@@ -154,8 +154,19 @@ def stream_simulator(data: str) -> Generator[list[str], None, None]:
     filestring = Path(data)
     full_path = base_dir / filestring
 
+
     if not data.endswith('.csv'):
         raise TypeError
+
+    if full_path.stat().st_size == 0:
+        raise ValueError('The stream source is empty.')
+
+    if not data:
+        raise ValueError('No data source provided.')
+
+    if not full_path.exists():
+        raise FileNotFoundError(f'File {data} not found.')
+
 
     else:
         while True:
@@ -169,11 +180,11 @@ def stream_simulator(data: str) -> Generator[list[str], None, None]:
 
 
 
-if __name__ == '__main__':
-    with CSVIngestor('paysim_dataset.csv') as data:
-        for transaction in data.get_transactions():
-            print(transaction)
-
+# if __name__ == '__main__':
+    # with CSVIngestor('paysim_dataset.csv') as data:
+    #     for transaction in data.get_transactions():
+    #         print(transaction)
+    #
     # with StreamIngestor('paysim_dataset.csv', True) as data:
     #     for tx in data.get_transactions():
     #         print(tx)
