@@ -151,10 +151,12 @@ class StreamIngestor(BaseIngestor):
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if exc_type is StopIteration:
             print('The stream has been interrupted.')
+            self.stream_obj.close()
             return True
 
         else:
             print("Encountered an error in reading the batch.")
+            self.stream_obj.close()
             return False
 
 

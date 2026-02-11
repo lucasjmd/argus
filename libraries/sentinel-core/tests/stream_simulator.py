@@ -22,17 +22,22 @@ def stream_simulator(data: str) -> Generator[list[str], None, None]:
     if not full_path.exists():
         raise FileNotFoundError(f'File {data} not found.')
 
-    while True:
-        file_obj = open(f'{full_path}', 'r')
-        reader_obj = csv.reader(file_obj)
-        # Skip header
-        next(reader_obj, None)
-        first_data_row = next(reader_obj, None)
+    try:
+        while True:
+            file_obj = open(f'{full_path}', 'r')
+            reader_obj = csv.reader(file_obj)
+            # Skip header
+            next(reader_obj, None)
+            first_data_row = next(reader_obj, None)
 
-        # yield first row of data if data was found
-        yield first_data_row
-        # followed by rest of data (may be empty)
-        for row in reader_obj:
-            yield row
+            # yield first row of data if data was found
+            yield first_data_row
+            # followed by rest of data (may be empty)
+            for row in reader_obj:
+                yield row
+
+    finally:
+        file_obj.close()
+        print('Stream closed safely.')
 
 
