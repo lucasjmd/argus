@@ -7,6 +7,12 @@ from time import sleep
 import time
 from pathlib import Path
 import psutil
+import sys
+
+stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
+sys.path.append(str(stream_simulator_dir))
+
+from stream_simulator import stream_simulator
 
 PAYSIM_DIR = '/home/lucas/github/argus/data'
 
@@ -76,6 +82,10 @@ class CSVIngestor(BaseIngestor):
             List[str]: A generator object that can iterate through the rows of the batch/static data.
         """
         self.reader_obj = csv.reader(self.file_obj)
+
+        # Skip header
+        next(self.reader_obj, None)
+
         for row in self.reader_obj:
             yield row
 
@@ -138,43 +148,8 @@ class StreamIngestor(BaseIngestor):
             return False
 
 
-def stream_simulator(data: str) -> Generator[list[str], None, None]:
-    """
-    Simulates an infinite 'stream' of the data from the csv file by looping through it continuously.
-    It yields a generator object and defines no .send method or finishing return statement.
 
-    Args:
-        str: The name of the csv file.
-    Yields:
-        List[str]: A generator object that can iterate continuously through the csv rows.
-
-    """
-    base_dir = Path(PAYSIM_DIR)
-    filestring = Path(data)
-    full_path = base_dir / filestring
-
-    if not data:
-        raise ValueError('No data source provided.')
-    if not data.endswith('.csv'):
-        raise TypeError
-    if full_path.stat().st_size == 0:
-        raise ValueError('The stream source is empty.')
-    if not full_path.exists():
-        raise FileNotFoundError(f'File {data} not found.')
-
-    else:
-        while True:
-            file_obj = open(f'{full_path}', 'r')
-            reader_obj = csv.reader(file_obj)
-
-            for row in reader_obj:
-                yield row
-
-            file_obj.close()
-
-
-
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # with CSVIngestor('paysim_dataset.csv') as data:
     #     for transaction in data.get_transactions():
     #         print(transaction)
@@ -183,5 +158,5 @@ if __name__ == '__main__':
     #     for tx in data.get_transactions():
     #         print(tx)
 
-    stream = stream_simulator('')
+
 
