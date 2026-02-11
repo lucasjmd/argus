@@ -15,14 +15,14 @@ row_sample_2 = '2,TRANSFER,1234.56,C840083671,1234567.1,89101112.13,M408069119,1
 
 class TestBatchLogic:
 
-    def test_instantiate_csvingestor():
+    def test_instantiate_csvingestor(self):
         CSVIngestor('abc')
 
-    def test_instant_csvingestor_wrongtype():
+    def test_instant_csvingestor_wrongtype(self):
         with pytest.raises(TypeError) as e:
             CSVIngestor(1)
 
-    def test_empty_batch_data(tmp_path):
+    def test_empty_batch_data(self, tmp_path):
         unit_test_data_dir = tmp_path / 'data'
         unit_test_data_dir.mkdir()
         test_filestring = unit_test_data_dir / 'test_tx_data.csv'
@@ -35,7 +35,7 @@ class TestBatchLogic:
 
         assert len(results) == 0
 
-    def test_csv_ingestor_close(tmp_path):
+    def test_csv_ingestor_close(self, tmp_path):
         unit_test_data_dir = tmp_path / 'data'
         unit_test_data_dir.mkdir()
         test_filestring = unit_test_data_dir / 'test_tx_data.csv'
@@ -49,7 +49,7 @@ class TestBatchLogic:
 
         assert data.file_obj.closed
 
-    def test_batch_ingestor_headers(tmp_path):
+    def test_batch_ingestor_headers(self, tmp_path):
         unit_test_data_dir = tmp_path / 'data'
         unit_test_data_dir.mkdir()
         test_filestring = unit_test_data_dir / 'test_tx_data.csv'
@@ -64,13 +64,13 @@ class TestBatchLogic:
 
 class TestStreamLogic:
 
-    def test_streamingestor_type_raise():
+    def test_streamingestor_type_raise(self):
         with pytest.raises(TypeError):
             stream = StreamIngestor('test.xlsx')
             next(stream)
 
     ## Finish when connected with actual stream
-    # def test_stream_ingestor_no_headers(tmp_path):
+    # def test_stream_ingestor_no_headers(self, tmp_path):
     #     unit_test_data_dir = tmp_path / 'data'
     #     unit_test_data_dir.mkdir()
     #     test_filestring = unit_test_data_dir / 'test_tx_data.csv'
@@ -85,25 +85,25 @@ class TestStreamLogic:
 
 class TestStreamSimulator:
 
-    def test_instant_streamsim():
+    def test_instant_streamsim(self):
         stream_simulator('abc.csv')
 
-    def test_stream_sim_data_type_raise():
+    def test_stream_sim_data_type_raise(self):
         with pytest.raises(TypeError) as e:
             generator_obj = stream_simulator('test.xlsx')
             next(generator_obj)
 
-    def test_stream_sim_no_source():
+    def test_stream_sim_no_source(self):
         with pytest.raises(ValueError):
             stream = stream_simulator('')
             next(stream)
 
-    def test_nonexistant_file_stream_sim():
+    def test_nonexistant_file_stream_sim(self):
         with pytest.raises(FileNotFoundError):
             stream = stream_simulator('non_data.csv')
             next(stream)
 
-    def test_empty_stream_data(tmp_path):
+    def test_empty_stream_data(self, tmp_path):
         unit_test_data_dir = tmp_path / 'data'
         unit_test_data_dir.mkdir()
         test_filestring = unit_test_data_dir / 'test_tx_data.csv'
@@ -116,7 +116,7 @@ class TestStreamSimulator:
         with pytest.raises(ValueError):
             results = list(itertools.islice(stream, 1))
 
-    def test_stream_sim_loop(tmp_path):
+    def test_stream_sim_loop(self, tmp_path):
         unit_test_data_dir = tmp_path / 'data'
         unit_test_data_dir.mkdir()
         test_filestring = unit_test_data_dir / 'test_tx_data.csv'
@@ -131,7 +131,7 @@ class TestStreamSimulator:
         assert results[0] == results[2]
         assert results[1] == results[3]
 
-    def test_stream_sim_data_read(tmp_path):
+    def test_stream_sim_data_read(self, tmp_path):
         unit_test_data_dir = tmp_path / 'data'
         unit_test_data_dir.mkdir()
         test_filestring = unit_test_data_dir / 'test_tx_data.csv'
@@ -147,7 +147,7 @@ class TestStreamSimulator:
 
 class TestOther:
 
-    def test_cannot_instantiate_abc():
+    def test_cannot_instantiate_abc(self):
         with pytest.raises(TypeError) as e:
             BaseIngestor()
 
