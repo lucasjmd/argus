@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 import psutil
 import sys
+import itertools
 
 stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
 sys.path.append(str(stream_simulator_dir))
@@ -81,12 +82,12 @@ class CSVIngestor(BaseIngestor):
         Yields:
             List[str]: A generator object that can iterate through the rows of the batch/static data.
         """
-        self.reader_obj = csv.reader(self.file_obj)
+        self.batch_obj = csv.reader(self.file_obj)
 
         # Skip header
-        next(self.reader_obj, None)
+        next(self.batch_obj, None)
 
-        for row in self.reader_obj:
+        for row in self.batch_obj:
             yield row
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
@@ -121,7 +122,16 @@ class StreamIngestor(BaseIngestor):
 
     def __enter__(self):
         print("Connecting to stream...")
-        self.gen_obj = stream_simulator(f'{self.data_source}')
+        # This is until we connect to a real stream
+        self.stream_obj = stream_simulator(f'{self.data_source}')
+
+        #Checking if stream has any data.
+        try:
+            first_value = next(self.stream_obj)
+            stream_obj = itertools.chain(first_value, self.stream_obj)
+        except StopIteration:
+            print('Stream is empty.')
+
         return self
 
     def get_transactions(self) -> Generator[list[str], None, None]:
@@ -132,7 +142,7 @@ class StreamIngestor(BaseIngestor):
         Yields:
             List[str]: A generator object that can iterate through the rows of the stream data.
         """
-        for row in self.gen_obj:
+        for row in self.stream_obj:
             if self.throttle:
                 time.sleep(0.2)
             yield row
@@ -149,14 +159,14 @@ class StreamIngestor(BaseIngestor):
 
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     # with CSVIngestor('paysim_dataset.csv') as data:
     #     for transaction in data.get_transactions():
     #         print(transaction)
-    #
-    # with StreamIngestor('paysim_dataset.csv', True) as data:
-    #     for tx in data.get_transactions():
-    #         print(tx)
+
+    with StreamIngestor('paysim_dataset.csv', True) as data:
+        for tx in data.get_transactions():
+            print(tx)
 
 
 
