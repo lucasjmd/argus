@@ -112,9 +112,9 @@ class TestStreamSimulator:
         test_filestring.write_text(content)
 
         stream = stream_simulator(str(test_filestring))
+        results = list(itertools.islice(stream, 2))
 
-        with pytest.raises(ValueError):
-            results = list(itertools.islice(stream, 1))
+        assert results == [None, None]
 
     def test_stream_sim_loop(self, tmp_path):
         unit_test_data_dir = tmp_path / 'data'

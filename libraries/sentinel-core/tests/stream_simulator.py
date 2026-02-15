@@ -19,8 +19,13 @@ def stream_simulator(data: str) -> Generator[list[str], None, None]:
     filestring = Path(data)
     full_path = base_dir / filestring
 
+    if not data:
+        raise ValueError(f'No stream connection passed.')
+    if not data.endswith('.csv'):
+        raise TypeError(f'Incorrect stream type.')
     if not full_path.exists():
         raise FileNotFoundError(f'File {data} not found.')
+
 
     try:
         while True:
