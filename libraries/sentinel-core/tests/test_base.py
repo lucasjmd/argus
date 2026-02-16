@@ -36,13 +36,6 @@ class TestBatchLogic:
         assert len(results) == 0
 
     def test_csv_ingestor_close(self, tmp_path):
-        unit_test_data_dir = tmp_path / 'data'
-        unit_test_data_dir.mkdir()
-        test_filestring = unit_test_data_dir / 'test_tx_data.csv'
-
-        content = '\n'.join([header_sample, row_sample_1, row_sample_1, row_sample_1])
-        test_filestring.write_text(content)
-
         with CSVIngestor(test_filestring) as data:
             for row in data.get_transactions():
                 pass
