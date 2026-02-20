@@ -20,12 +20,26 @@ missing_keyword_dict['oldbalanceOrg'] = None
 wrongtype_keyword_dict = pydantic_keyword_dict.copy()
 wrongtype_keyword_dict['step'] = 'shouldBeInt'
 
+emptystring_keyword_dict = pydantic_keyword_dict.copy()
+emptystring_keyword_dict['type'] = ''
+
+def test_incorrect_account():
+    with pytest.raises(ValidationError):
+        Transaction(nameOrig='X123456789')
+
+    with pytest.raises(ValidationError):
+        Transaction(nameDest='X123456789')
+
+def test_empty_string():
+    with pytest.raises(ValidationError):
+        tx = Transaction(**emptystring_keyword_dict)
+
 def test_missing_field():
-    with pytest.raises(ValidationError) as e:
+    with pytest.raises(ValidationError):
         tx = Transaction(**missing_keyword_dict)
 
 def test_incorrect_type():
-    with pytest.raises(ValidationError) as e:
+    with pytest.raises(ValidationError):
         tx = Transaction(**wrongtype_keyword_dict)
 
 def test_simple_row_pass():
