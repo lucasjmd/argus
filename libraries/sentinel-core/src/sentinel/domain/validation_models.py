@@ -3,6 +3,7 @@ from decimal import Decimal
 
 # constrained schema for balance-related columns
 
+# Setting a dictionary that matches the columns of the data, for easy keyword argument passing to the Transaction class
 pydantic_keyword_dict = {
     'step':None,
     'type': None,
@@ -17,6 +18,7 @@ pydantic_keyword_dict = {
     'isFlaggedFraud':None,
 }
 
+# Pydantic schema for all balance-related columns
 balance_schema = condecimal(
         strict=False,
         ge=0,
@@ -25,6 +27,10 @@ balance_schema = condecimal(
     )
 
 class Transaction(BaseModel):
+    """
+    A Pydantic class to check if the incoming rows of paysim transaction data conform to the expected types and values
+    per column.
+    """
     step: int
     type: str
     amount: condecimal(
