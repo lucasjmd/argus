@@ -17,6 +17,10 @@ from stream_simulator import stream_simulator
 
 PAYSIM_DIR = '/home/lucas/github/argus/data'
 
+base_dir = Path(PAYSIM_DIR)
+filestring = Path('paysim_dataset.csv')
+full_path = base_dir / filestring
+
 class BaseIngestor(ABC):
     """
     Abstract base class for ingesting transaction data in various forms.
