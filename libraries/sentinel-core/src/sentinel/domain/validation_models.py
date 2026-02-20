@@ -1,5 +1,6 @@
-from pydantic import BaseModel, condecimal
+from pydantic import BaseModel, condecimal, Field
 from decimal import Decimal
+from typing import Literal
 
 # constrained schema for balance-related columns
 
@@ -32,17 +33,17 @@ class Transaction(BaseModel):
     per column.
     """
     step: int
-    type: str
+    type: Literal['CASH_IN', 'CASH_OUT', 'DEBIT', 'PAYMENT', 'TRANSFER']
     amount: condecimal(
         strict=False,
         gt=0,
         decimal_places=2,
         allow_inf_nan=False,
     )
-    nameOrig: str
+    nameOrig: str = Field(pattern=r'^C')
     oldbalanceOrg: balance_schema
     newbalanceOrig: balance_schema
-    nameDest: str
+    nameDest: str = Field(pattern=r'^[CM]')
     oldbalanceDest: balance_schema
     newbalanceDest: balance_schema
     isFraud: int
