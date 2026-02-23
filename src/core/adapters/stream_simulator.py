@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Generator
 import csv
 
+
 PAYSIM_DIR = '/home/lucas/github/argus/data'
 
 def stream_simulator(data: str) -> Generator[list[str], None, None]:

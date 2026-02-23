@@ -134,12 +134,11 @@ class StreamIngestor(BaseIngestor):
             return False
 
 
-
 if __name__ == '__main__':
-    # with CSVIngestor('paysim_dataset.csv') as data:
-    #     for transaction in data.get_transactions():
-    #         print(transaction)
+    with CSVIngestor('paysim_dataset.csv') as data:
+        for transaction in data.get_transactions():
+            print(transaction)
 
-    with StreamIngestor('paysim_dataset.csv', True) as data:
-        for tx in data.get_transactions():
-            print(tx)
+    # with StreamIngestor('paysim_dataset.csv', True) as data:
+    #     for tx in data.get_transactions():
+    #         print(tx)
