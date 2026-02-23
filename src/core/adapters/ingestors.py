@@ -1,3 +1,24 @@
+from typing import Iterator, Generator
+import csv
+import time
+from pathlib import Path
+import sys
+import itertools
+
+
+from core.domain.base import BaseIngestor
+from core.adapters.stream_simulator import stream_simulator
+
+
+stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
+sys.path.append(str(stream_simulator_dir))
+
+PAYSIM_DIR = '/home/lucas/github/argus/data'
+
+base_dir = Path(PAYSIM_DIR)
+filestring = Path('paysim_dataset.csv')
+full_path = base_dir / filestring
+
 class CSVIngestor(BaseIngestor):
     """
     Concrete ingestor engine class for ingesting 'batch'  transaction data coming from a .csv file.
@@ -115,10 +136,10 @@ class StreamIngestor(BaseIngestor):
 
 
 if __name__ == '__main__':
-    with CSVIngestor('paysim_dataset.csv') as data:
-        for transaction in data.get_transactions():
-            print(transaction)
+    # with CSVIngestor('paysim_dataset.csv') as data:
+    #     for transaction in data.get_transactions():
+    #         print(transaction)
 
-    # with StreamIngestor('paysim_dataset.csv', True) as data:
-    #     for tx in data.get_transactions():
-    #         print(tx)
+    with StreamIngestor('paysim_dataset.csv', True) as data:
+        for tx in data.get_transactions():
+            print(tx)

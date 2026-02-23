@@ -1,25 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Iterator, Generator
-from os import getcwd
-from sys import path
-import csv
-from time import sleep
-import time
 from pathlib import Path
-import psutil
 import sys
-import itertools
 
-stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
-sys.path.append(str(stream_simulator_dir))
-
-from stream_simulator import stream_simulator
-
-PAYSIM_DIR = '/home/lucas/github/argus/data'
-
-base_dir = Path(PAYSIM_DIR)
-filestring = Path('paysim_dataset.csv')
-full_path = base_dir / filestring
 
 class BaseIngestor(ABC):
     """
