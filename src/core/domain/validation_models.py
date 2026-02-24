@@ -1,10 +1,11 @@
-from pydantic import BaseModel, condecimal, Field
-from decimal import Decimal
 from typing import Literal
+
+from pydantic import BaseModel, Field, condecimal
 
 # constrained schema for balance-related columns
 
-# Setting a dictionary that matches the columns of the data, for easy keyword argument passing to the Transaction class
+# Setting a dictionary that matches the columns of the data, for easy keyword
+# argument passing to the Transaction class
 pydantic_keyword_dict = {
     'step':None,
     'type': None,
@@ -29,7 +30,8 @@ balance_schema = condecimal(
 
 class Transaction(BaseModel):
     """
-    A Pydantic class to check if the incoming rows of paysim transaction data conform to the expected types and values
+    A Pydantic class to check if the incoming rows of paysim transaction data
+    conform to the expected types and values
     per column.
     """
     step: int
