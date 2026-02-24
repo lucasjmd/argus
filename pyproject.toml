@@ -25,4 +25,33 @@ dev = [
 ]
 
 [tool.ruff]
+line-length = 80
+
+[tool.ruff.format]
+quote-style = 'single'
+
+[tool.ruff.lint]
+extend-select = [
+    "I",
+    "UP",
+    "PLR5501",
+    "PLR1711",
+    "PLR1714",
+    "PLR0402",
+    "SIM",
+    "N",
+    "C4",
+    "F",
+    "E",
+    "W391",
+    "W505",
+    "RET",
+    "TID252",
+    "PTH",
+    "TD004",
+    "TD005",
+    "TD006",
+    "TD007",
+
+]
 
