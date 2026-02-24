@@ -8,7 +8,6 @@ dependencies = [
     "loguru>=0.7",
     "psutil>=7.2.2",
     "pydantic>=2.12.5",
-    "pytest>=9.0.2",
 ]
 
 
@@ -22,4 +21,8 @@ packages = ["src/core"]
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
+    "ruff>=0.15.2",
 ]
+
+[tool.ruff]
+
