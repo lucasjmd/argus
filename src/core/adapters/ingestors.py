@@ -1,4 +1,4 @@
-from typing import Iterator, Generator
+from typing import Generator
 import csv
 import time
 from pathlib import Path
@@ -102,7 +102,7 @@ class StreamIngestor(BaseIngestor):
         #Checking if stream has any data.
         try:
             first_value = next(self.stream_obj)
-            stream_obj = itertools.chain(first_value, self.stream_obj)
+            itertools.chain(first_value, self.stream_obj)
         except StopIteration:
             print('Stream is empty.')
 
