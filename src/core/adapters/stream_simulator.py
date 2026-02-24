@@ -1,19 +1,20 @@
-from pathlib import Path
-from typing import Generator
 import csv
-
+from collections.abc import Generator
+from pathlib import Path
 
 PAYSIM_DIR = '/home/lucas/github/argus/data'
 
 def stream_simulator(data: str) -> Generator[list[str], None, None]:
     """
-    Simulates an infinite 'stream' of the data from the csv file by looping through it continuously.
-    It yields a generator object and defines no .send method or finishing return statement.
+    Simulates an infinite 'stream' of the data from the csv file by looping
+    through it continuously. It yields a generator object and defines no
+    .send method or finishing return statement.
 
     Args:
         str: The name of the csv file.
     Yields:
-        List[str]: A generator object that can iterate continuously through the csv rows.
+        List[str]: A generator object that can iterate continuously through
+        the csv rows.
 
     """
     base_dir = Path(PAYSIM_DIR)
@@ -21,16 +22,16 @@ def stream_simulator(data: str) -> Generator[list[str], None, None]:
     full_path = base_dir / filestring
 
     if not data:
-        raise ValueError(f'No stream connection passed.')
+        raise ValueError('No stream connection passed.')
     if not data.endswith('.csv'):
-        raise TypeError(f'Incorrect stream type.')
+        raise TypeError('Incorrect stream type.')
     if not full_path.exists():
         raise FileNotFoundError(f'File {data} not found.')
 
 
     try:
         while True:
-            file_obj = open(f'{full_path}', 'r')
+            file_obj = Path.open(f'{full_path}')
             reader_obj = csv.reader(file_obj)
             # Skip header
             next(reader_obj, None)
@@ -39,8 +40,7 @@ def stream_simulator(data: str) -> Generator[list[str], None, None]:
             # yield first row of data if data was found
             yield first_data_row
             # followed by rest of data (may be empty)
-            for row in reader_obj:
-                yield row
+            yield from reader_obj
 
     finally:
         file_obj.close()
