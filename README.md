@@ -1,5 +1,8 @@
 # 🛡️ Argus
 
+> *"The thousand eyes of sacred Argus, which he kept but in alternate watchfulness,* 
+> *nor even waked in all his frame at once."* - Statius, Silvae
+
 **Argus is an end-to-end, high-performance financial transaction validation engine.<br>**
 It was built with a focus on using data contracts for ensuring type and schema consistency<br>
 in an effort to ensure financial transaction data is clean and validated for use machine learning<br>
