@@ -18,3 +18,10 @@ data sources (SQL db's, Kafka, etc.)
 
 ## ℹ️ Overview
 
+## Installation
+
+## 📅 Roadmap
+
+## Motivation
+
+## Author
