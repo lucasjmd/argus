@@ -3,11 +3,15 @@
 **Argus is an end-to-end, high-performance financial transaction validation engine.<br>**
 It was built with a focus on using data contracts for ensuring type and schema consistency<br>
 in an effort to ensure financial transaction data is clean and validated for use machine learning<br>
-models for fraud detection purposes (coming later).
+models for fraud detection purposes (will be added later).
 
 ## 🌟 Highlights
 
-* Native support for both batch data and stream data
+* Native support for both batch data and live stream data
 * Built-in resource management to ensure safe file/stream handling
-* Abstract-base classes make it easy to plug-and-play with new data sources (SQL db's, Kafka, etc.)
-* Designed for low-latency validation
+* Powered by Pydantic V2 for sub-millisecond validation
+* Abstract-base classes decouple logic from data, making it easy to plug-and-play with new<br>
+data sources (SQL db's, Kafka, etc.)
+
+## ℹ️ Overview
+
