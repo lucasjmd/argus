@@ -21,6 +21,12 @@ data sources (SQL db's, Kafka, etc.)
 ## Installation
 
 ## 📅 Roadmap
+️
+* **[Completed] Phase 1: Building the robust core** (Q1 2026)
+* **[Upcoming] Phase 2: Containerization**          (Q2 2026)
+* **[Upcoming] Phase 3: Batch orchestrator** (Q3 2026)
+* **[Upcoming] Phase 4: Streaming** (Q4 2026)
+
 
 ## Motivation
 
