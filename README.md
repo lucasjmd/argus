@@ -22,7 +22,7 @@ data sources (SQL db's, Kafka, etc.)
 
 ## 📅 Roadmap
 
-**Progress:** <progress value="12.5" max="100"></progress> **12,5%**<br>
+**Progress:** `███░░░░░░░░░░░░░░░░░` **12,5%**<br>
 <br>
 **Phase 1: Building the Infrastructure**
 * **[Completed] Milestone 1: Building the robust core** (Q1 2026)
