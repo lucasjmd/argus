@@ -41,11 +41,14 @@ data sources (SQL db's, Kafka, etc.)
 ## Motivation
 *Why am I building Argus?<br>*
 <br>
-Argus is a technical sandbox which allows me to experiment with building high-throughput data pipelines.
+Argus is a technical sandbox which allows me to experiment with building high-throughput data pipelines in my free-time.
 The main motivation is for me to improve my software engineering skills and play around with various tools and designs.<br> <br>
 While my previous projects focussed on implementing certain logic or building proof-of-concept tools,<br>
 Argus focusses on good engineering practices, like defensive programming (e.g. Pydantic), architectural design<br>
-(e.g. decoupling logic from data source) and performance benchmarking.<br>
+(e.g. decoupling logic from data source) and performance benchmarking. It combines my interest in finance and machine learning<br>
 
 ## Author
 *Who am I?*
+I'm Lucas, a junior data engineer based in The Netherlands. I have a background in statistics and programming and 
+am interested in improving my software engineering skillset in and outside of work. 
+
