@@ -18,7 +18,7 @@ data sources (SQL db's, Kafka, etc.)
 
 ## ℹ️ Overview
 
-## Installation
+## 💽 Installation
 
 ## 📅 Roadmap
 
@@ -26,7 +26,7 @@ data sources (SQL db's, Kafka, etc.)
 <br>
 **Phase 1: Building the Infrastructure**
 * [Completed] Milestone 1: Building the robust core (Q1 2026)
-* **[Current] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Milestone 2: Containerization** (Q2 2026)
+* **[Current] &nbsp;&nbsp;&nbsp;&nbsp;Milestone 2: Containerization** (Q2 2026)
 * [Upcoming] &nbsp;Milestone 3: Batch orchestrator (Q3 2026)
 * [Upcoming] &nbsp;Milestone 4: Streaming (Q4 2026)
 
@@ -37,16 +37,17 @@ data sources (SQL db's, Kafka, etc.)
 * [Upcoming] &nbsp;Milestone 8: Polish (Q4 2027)
 
 
-## Motivation
+## 💭 Motivation
 
 Argus is a technical sandbox which allows me to experiment with building high-throughput data pipelines in my free-time.
-The main motivation is for me to improve my software engineering skills and play around with various tools and designs.<br> <br>
+The main motivation is for me to improve my software engineering skills and play around with various tools and designs.
+So, if it looks over-engineered for a hobby project...that's the point! The project also combines my interest in finance and machine learning.<br>
+
 While my previous projects focussed on implementing certain logic or building proof-of-concept tools,<br>
 Argus focusses on good engineering practices, like defensive programming (e.g. Pydantic), architectural design<br>
-(e.g. decoupling logic from data source) and performance benchmarking. It combines my interest in finance and machine learning<br>
+(e.g. decoupling logic from data source) and performance benchmarking.
 
-## Author
-
+## 👨‍💻 Author
 I'm Lucas, a junior data engineer based in The Netherlands. I have a background in statistics and programming and 
-am interested in improving my software engineering skillset in and outside of work. 
+am interested in improving my software engineering skillset inside and outside of my job. 
 
