@@ -21,11 +21,20 @@ data sources (SQL db's, Kafka, etc.)
 ## Installation
 
 ## 📅 Roadmap
-️
-* **[Completed] Phase 1: Building the robust core** (Q1 2026)
-* **[Upcoming] Phase 2: Containerization**          (Q2 2026)
-* **[Upcoming] Phase 3: Batch orchestrator** (Q3 2026)
-* **[Upcoming] Phase 4: Streaming** (Q4 2026)
+
+**Progress:** <progress value="12.5" max="100"></progress> **12,5%**<br>
+<br>
+**Phase 1: Building the Infrastructure**
+* **[Completed] Milestone 1: Building the robust core** (Q1 2026)
+* **[Upcoming] Milestone 2: Containerization**          (Q2 2026)
+* **[Upcoming] Milestone 3: Batch orchestrator** (Q3 2026)
+* **[Upcoming] Milestone 4: Streaming** (Q4 2026)
+
+**Phase 2: Optimising and Scaling**
+* **[Upcoming] Milestone 5: Automation and reliability (CI/CD)** (Q1 2027)
+* **[Upcoming] Milestone 6: Optimisation** (Q2 2027)
+* **[Upcoming] Milestone 7: Interface and concurrency** (Q3 2027)
+* **[Upcoming] Milestone 8: Polish** (Q4 2027)
 
 
 ## Motivation
