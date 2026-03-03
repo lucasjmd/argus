@@ -1,5 +1,5 @@
 # 🛡️ Argus
-
+![Status](https://img.shields.io/badge/Status-Phase_2:_Containerization-green)
 > *"The thousand eyes of sacred Argus, which he kept but in alternate watchfulness,* 
 > *nor even waked in all his frame at once."* - Statius, Silvae
 
