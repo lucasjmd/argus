@@ -19,17 +19,19 @@ models for fraud detection purposes (will be added later).
 data sources (SQL db's, Kafka, etc.)
 
 ## ℹ️ Overview
-
+Under construction...
+<br>
 
 ## 💽 Installation
+Under construction...
 
 ## 📅 Roadmap
 
 **Progress:** `███░░░░░░░░░░░░░░░░░` **12,5%**<br>
 <br>
 **Phase 1: Building the Infrastructure**
-* [Completed] Milestone 1: Building the robust core (Q1 2026)
-* **[Current] &nbsp;&nbsp;&nbsp;&nbsp;Milestone 2: Containerization** (Q2 2026)
+* **[Current] &nbsp;&nbsp;&nbsp;&nbsp;Milestone 1: Building the robust core** (Q1 2026)
+* [Upcoming] &nbsp;Milestone 2: Containerization** (Q2 2026)
 * [Upcoming] &nbsp;Milestone 3: Batch orchestrator (Q3 2026)
 * [Upcoming] &nbsp;Milestone 4: Streaming (Q4 2026)
 
