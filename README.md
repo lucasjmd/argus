@@ -30,9 +30,9 @@ Under construction...
 **Progress:** `███░░░░░░░░░░░░░░░░░` **12,5%**<br>
 <br>
 **Phase 1: Building the Infrastructure**
-* **[Current] &nbsp;&nbsp;&nbsp;&nbsp;Milestone 1: Building the robust core** (Q1 2026)
+* **[Current] &nbsp;&nbsp;&nbsp;&nbsp;Milestone 1: Core foundations** (Q1 2026)
 * [Upcoming] &nbsp;Milestone 2: Containerization (Q2 2026)
-* [Upcoming] &nbsp;Milestone 3: Batch orchestrator & streaming (Q3 2026)
+* [Upcoming] &nbsp;Milestone 3: **Batch orchestrator & streaming** (Q3 2026)
 * [Upcoming] &nbsp;Milestone 4: Automation and reliability (Q4 2026)
 
 **Phase 2: Optimising and Scaling**
