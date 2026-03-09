@@ -31,15 +31,14 @@ Under construction...
 <br>
 **Phase 1: Building the Infrastructure**
 * **[Current] &nbsp;&nbsp;&nbsp;&nbsp;Milestone 1: Building the robust core** (Q1 2026)
-* [Upcoming] &nbsp;Milestone 2: Containerization** (Q2 2026)
-* [Upcoming] &nbsp;Milestone 3: Batch orchestrator (Q3 2026)
-* [Upcoming] &nbsp;Milestone 4: Streaming (Q4 2026)
+* [Upcoming] &nbsp;Milestone 2: Containerization (Q2 2026)
+* [Upcoming] &nbsp;Milestone 3: Batch orchestrator & streaming (Q3 2026)
+* [Upcoming] &nbsp;Milestone 4: Automation and reliability (Q4 2026)
 
 **Phase 2: Optimising and Scaling**
-* [Upcoming] &nbsp;Milestone 5: Automation and reliability (CI/CD) (Q1 2027)
-* [Upcoming] &nbsp;Milestone 6: Optimisation (Q2 2027)
-* [Upcoming] &nbsp;Milestone 7: Interface and concurrency (Q3 2027)
-* [Upcoming] &nbsp;Milestone 8: Polish (Q4 2027)
+* [Upcoming] &nbsp;Milestone 5: Intelligence (Q1 2027)
+* [Upcoming] &nbsp;Milestone 6: Optimisation & polish (Q2 2027)
+
 
 
 ## 💭 Motivation
