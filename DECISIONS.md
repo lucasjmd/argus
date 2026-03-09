@@ -3,6 +3,10 @@
 I organised my folders into adapters and domain. This decouples business logic from infrastructure. The code that <br>
 dictates what constitutes a transaction and its rule are separate from the system that allows the data to come in.
 
+**Tools**<br>
+Ruff<br>
+UV
+
 ## Code
 ### Domain
 <code>**base.py**</code><br>
