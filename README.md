@@ -46,7 +46,7 @@ Under construction...
 
 Argus is a technical sandbox which allows me to experiment with building high-throughput data pipelines in my free-time.
 The main motivation is for me to improve my software engineering skills and play around with various tools and designs.
-So, if it looks over-engineered for a hobby project...that's the point! The project also combines my interest in finance and machine learning.<br>
+The project also combines my interest in finance and machine learning.<br>
 
 While my previous projects focussed on implementing certain logic or building proof-of-concept tools,<br>
 Argus focusses on good engineering practices, like defensive programming (e.g. Pydantic), architectural design<br>
