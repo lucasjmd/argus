@@ -1,4 +1,4 @@
-# 🛡️ Argus
+# Argus
 ![Status](https://img.shields.io/badge/Status-Phase_2:_Containerization-green)<br>
 ![Python](https://img.shields.io/badge/Python-3.12+-blue?logo=python&logoColor=white)<br>
 ![Validation](https://img.shields.io/badge/Validation-Pydantic_V2-red?logo=pydantic)
@@ -10,7 +10,7 @@ It was built with a focus on using data contracts for ensuring type and schema c
 in an effort to ensure financial transaction data is clean and validated for use machine learning<br>
 models for fraud detection purposes (will be added later).
 
-## 🌟 Highlights
+## Highlights
 
 * Native support for both batch data and live stream data
 * Built-in resource management to ensure safe file/stream handling
@@ -18,14 +18,14 @@ models for fraud detection purposes (will be added later).
 * Abstract-base classes decouple logic from data, making it easy to plug-and-play with new<br>
 data sources (SQL db's, Kafka, etc.)
 
-## ℹ️ Overview
+## Overview
 Under construction...
 <br>
 
-## 💽 Installation
+## Installation
 Under construction...
 
-## 📅 Roadmap
+## Roadmap
 
 **Progress:** `███░░░░░░░░░░░░░░░░░` **12,5%**<br>
 <br>
@@ -41,7 +41,7 @@ Under construction...
 
 
 
-## 💭 Motivation
+## Motivation
 
 Argus is a technical sandbox which allows me to experiment with building high-throughput data pipelines in my free-time.
 The main motivation is for me to improve my software engineering skills and play around with various tools and designs.
@@ -51,7 +51,7 @@ While my previous projects focussed on implementing certain logic or building pr
 Argus focusses on good engineering practices, like defensive programming (e.g. Pydantic), architectural design<br>
 (e.g. decoupling logic from data source) and performance benchmarking.
 
-## 👨‍💻 Author
+## Author
 I'm Lucas, a junior data engineer based in The Netherlands. I have a background in statistics and programming and 
 am interested in improving my software engineering skillset inside and outside of my job. 
 
