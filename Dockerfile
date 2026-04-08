@@ -1,7 +1,6 @@
 FROM python:3.12
 WORKDIR /argusapp
-COPY pyproject.toml uv.lock ./
-RUN pip install uv
-RUN uv install
 COPY . .
+RUN pip install uv
+RUN uv sync
 CMD ["Python","main.py"]
