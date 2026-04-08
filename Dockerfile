@@ -1,6 +1,6 @@
 FROM python:3.12
-WORKDIR /argusapp
+WORKDIR /argus
 COPY . .
 RUN pip install uv
 RUN uv sync
-CMD ["Python","main.py"]
+CMD ["python","src/core/adapters/ingestors.py"]
