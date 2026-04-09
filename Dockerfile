@@ -3,4 +3,4 @@ WORKDIR /argus
 COPY . .
 RUN pip install uv
 RUN uv sync
-CMD ["python","src/core/adapters/ingestors.py"]
+CMD ["uv","run","python","-m","src.core.adapters.ingestors"]
