@@ -11,7 +11,7 @@ from core.domain.base import BaseIngestor
 stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
 sys.path.append(str(stream_simulator_dir))
 
-PAYSIM_DIR = '/home/lucas/github/argus/data'
+PAYSIM_DIR = 'data'
 
 base_dir = Path(PAYSIM_DIR)
 filestring = Path('paysim_dataset.csv')
