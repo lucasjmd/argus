@@ -1,7 +1,7 @@
 # Argus
-![Status](https://img.shields.io/badge/Status-Phase_2:_Containerization-green)<br>
-![Python](https://img.shields.io/badge/Python-3.12+-blue?logo=python&logoColor=white)<br>
-![Validation](https://img.shields.io/badge/Validation-Pydantic_V2-red?logo=pydantic)
+![Status](https://img.shields.io/badge/Status-Phase_2:_Containerization-green)
+![Python](https://img.shields.io/badge/Python-3.12+-blue?logo=python&logoColor=white)
+![Validation](https://img.shields.io/badge/Validation-Pydantic_V2-red?logo=pydantic)<br>
 > *"The thousand eyes of sacred Argus, which he kept but in alternate watchfulness,* 
 > *nor even waked in all his frame at once."* - Statius, Silvae
 
