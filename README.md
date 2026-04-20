@@ -1,5 +1,4 @@
 # Argus
-![Status](https://img.shields.io/badge/Status-Phase_2:_Containerization-green)
 ![Python](https://img.shields.io/badge/Python-3.12+-blue?logo=python&logoColor=white)
 ![Validation](https://img.shields.io/badge/Validation-Pydantic_V2-red?logo=pydantic)<br>
 > *"The thousand eyes of sacred Argus, which he kept but in alternate watchfulness,* 
@@ -24,22 +23,7 @@ Under construction...
 
 ## Installation
 Under construction...
-
-## Roadmap
-
-**Progress:** `███░░░░░░░░░░░░░░░░░` **12,5%**<br>
 <br>
-**Phase 1: Building the Infrastructure**
-* [Completed] &nbsp;Milestone 1: Core foundations (Q1 2026)
-* **[Current] &nbsp;&nbsp;&nbsp;&nbsp;Milestone 2: Containerization** (Q2 2026)
-* [Upcoming] &nbsp;Milestone 3: Batch orchestrator & streaming (Q3 2026)
-* [Upcoming] &nbsp;Milestone 4: Automation and reliability (Q4 2026)
-
-**Phase 2: Optimising and Scaling**
-* [Upcoming] &nbsp;Milestone 5: Intelligence (Q1 2027)
-* [Upcoming] &nbsp;Milestone 6: Optimisation & polish (Q2 2027)
-
-
 
 ## Motivation
 
