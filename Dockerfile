@@ -1,4 +1,4 @@
-mROM python:3.12
+FROM python:3.12
 WORKDIR /argus
 COPY . .
 RUN pip install uv
