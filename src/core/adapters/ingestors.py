@@ -11,11 +11,7 @@ from core.domain.base import BaseIngestor
 stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
 sys.path.append(str(stream_simulator_dir))
 
-PAYSIM_DIR = 'data'
-
-base_dir = Path(PAYSIM_DIR)
-filestring = Path('paysim_dataset.csv')
-full_path = base_dir / filestring
+PAYSIM_DIR = '/data/'
 
 class CSVIngestor(BaseIngestor):
     """
@@ -38,9 +34,7 @@ class CSVIngestor(BaseIngestor):
     def __init__(self, data_source: str):
         self.data_source = data_source
 
-        base_dir = Path(PAYSIM_DIR)
-        filestring = Path(data_source)
-        self.full_path = base_dir / filestring
+        self.full_path = PAYSIM_DIR + 'paysim_dataset.csv'
 
     def __enter__(self):
         print("Connecting to batch...")
@@ -105,7 +99,7 @@ class StreamIngestor(BaseIngestor):
             first_value = next(self.stream_obj)
             itertools.chain(first_value, self.stream_obj)
         except StopIteration:
-            print('Stream is empty.')
+                     print('Stream is empty.')
 
         return self
 
