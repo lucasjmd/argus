@@ -2,16 +2,16 @@ import csv
 import itertools
 import sys
 import time
+import mysql.connector
+
 from collections.abc import Generator
 from pathlib import Path
 
-from core.adapters.stream_simulator import stream_simulator
-from core.domain.base import BaseIngestor
+from src.core.adapters.stream_simulator import stream_simulator
+from src.core.domain.base import BaseIngestor
 
 stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
 sys.path.append(str(stream_simulator_dir))
-
-PAYSIM_DIR = '/data/'
 
 class CSVIngestor(BaseIngestor):
     """
@@ -25,23 +25,29 @@ class CSVIngestor(BaseIngestor):
 
     Args:
         data_source (str): The csv file representing the batch or static data.
-
+j
     Attributes:
         None
 
     """
 
-    def __init__(self, data_source: str):
-        self.data_source = data_source
-
-        self.full_path = PAYSIM_DIR + 'paysim_dataset.csv'
+    def __init__(self):
+        pass
 
     def __enter__(self):
-        print("Connecting to batch...")
-        self.file_obj = Path.open(f'{self.full_path}', 'r')
+        self.config = {
+            'user': 'root',
+            'password': 'secret',
+            'host': 'mysql-db',
+            'database': 'paysim'
+            }
+
+        self.conn = mysql.connector.connect(**self.config)
+        self.cursor = self.conn.cursor()
+        
         return self
 
-    def get_transactions(self) -> Generator[list[str], None, None]:
+    def get_transactions(self):
         """
         Generator that yields each row of the csv.
         It defines no .send method or finishing return statement.
@@ -50,22 +56,18 @@ class CSVIngestor(BaseIngestor):
             List[str]: A generator object that can iterate through the rows of
             the batch/static data.
         """
-        self.batch_obj = csv.reader(self.file_obj)
+        self.cursor.execute("SELECT * FROM transactions")
 
-        # Skip header
-        next(self.batch_obj, None)
-
-        for row in self.batch_obj:
-            time.sleep(0.2)
+        for row in self.cursor:
             yield row
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         if exc_type is StopIteration:
             print('Reached the end of the batch.')
-            self.file_obj.close()
+            self.conn.close()
             return True
 
-        self.file_obj.close()
+        self.conn.close()
         print("Encountered an error in reading the batch.")
         return False
 
@@ -131,7 +133,7 @@ class StreamIngestor(BaseIngestor):
 
 
 if __name__ == '__main__':
-    with CSVIngestor('paysim_dataset.csv') as data:
+    with CSVIngestor() as data:
         for transaction in data.get_transactions():
             print(transaction)
 
