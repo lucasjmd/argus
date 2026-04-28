@@ -15,8 +15,8 @@ sys.path.append(str(stream_simulator_dir))
 
 class CSVIngestor(BaseIngestor):
     """
-    Concrete ingestor engine class for ingesting 'batch'  transaction data
-    coming from a .csv file.
+    Concrete ingestor engine class for ingesting 'batch' transaction data
+    coming from a MySQL db container.
 
     This concrete version of the BaseIngestor abstract base class specifies
     how batch or static data has to be ingested. It can be used as a context
@@ -24,8 +24,7 @@ class CSVIngestor(BaseIngestor):
     via a generator object that can be iterated through.
 
     Args:
-        data_source (str): The csv file representing the batch or static data.
-j
+        None
     Attributes:
         None
 
@@ -35,29 +34,35 @@ j
         pass
 
     def __enter__(self):
+        """
+        Allows transaction data to be accessed via a context manager. 
+        Sets the parameters to be passed to the terminal/MySQL shell.
+        """
         self.config = {
             'user': 'root',
             'password': 'secret',
             'host': 'mysql-db',
             'database': 'paysim'
             }
-
+        # Opens network to MySQL container
         self.conn = mysql.connector.connect(**self.config)
+        # Pass commands to the db via the cursor
         self.cursor = self.conn.cursor()
         
         return self
 
     def get_transactions(self):
         """
-        Generator that yields each row of the csv.
+        Generator that yields each row of the table.
         It defines no .send method or finishing return statement.
 
         Yields:
-            List[str]: A generator object that can iterate through the rows of
+            A generator object that can iterate through the rows of
             the batch/static data.
         """
         self.cursor.execute("SELECT * FROM transactions")
-
+        
+        #iterate over the cursos directly to avoid loading whole table into memory
         for row in self.cursor:
             yield row
 
