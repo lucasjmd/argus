@@ -13,7 +13,7 @@ from src.core.domain.base import BaseIngestor
 stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
 sys.path.append(str(stream_simulator_dir))
 
-class CSVIngestor(BaseIngestor):
+class BatchIngestor(BaseIngestor):
     """
     Concrete ingestor engine class for ingesting 'batch' transaction data
     coming from a MySQL db container.
@@ -138,7 +138,7 @@ class StreamIngestor(BaseIngestor):
 
 
 if __name__ == '__main__':
-    with CSVIngestor() as data:
+    with BatchIngestor() as data:
         for transaction in data.get_transactions():
             print(transaction)
 
