@@ -1,0 +1,28 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: paysim
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - argus-network
+
+  app:
+    build: .
+    container_name: argus-app
+    restart: on-failure
+    depends_on:
+      - db
+    networks:
+      - argus-network
+
+volumes:
+  mysql_data:
+    external: true
+
+networks:
+  argus-network:
