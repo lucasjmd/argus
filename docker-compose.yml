@@ -22,7 +22,7 @@ services:
 
 volumes:
   mysql_data:
-    external: true
+    
 
 networks:
   argus-network:
