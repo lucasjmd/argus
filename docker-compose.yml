@@ -23,6 +23,5 @@ services:
 volumes:
   mysql_data:
 
-
 networks:
   argus-network:
