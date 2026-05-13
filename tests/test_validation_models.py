@@ -3,15 +3,24 @@ from pydantic import ValidationError
 from core.domain.validation_models import Transaction, pydantic_keyword_dict
 from core.adapters.ingestors import BatchIngestor, StreamIngestor
 import itertools
+import csv
 from pathlib import Path
 from decimal import Decimal
 
-with BatchIngestor(full_path) as data:
-    results = list(itertools.islice(data.get_transactions(), 1))
+# reference to data locally saved as csv to be able to test without having to start mysql docker container
+# or messing with networks
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_PATH = BASE_DIR / 'paysim_data' / 'paysim_dataset.csv'
+
+with open(DATA_PATH, mode='r', encoding='utf-8') as f:
+    reader = csv.reader(f)
+    header = next(reader)
+    first_row = next(reader)
 
     i = 0
+
     for key in pydantic_keyword_dict.keys():
-        pydantic_keyword_dict[key] = results[0][i]
+        pydantic_keyword_dict[key] = first_row[i]
         i += 1
 
 missing_keyword_dict = pydantic_keyword_dict.copy()
