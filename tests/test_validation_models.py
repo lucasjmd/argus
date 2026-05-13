@@ -2,7 +2,6 @@ import pytest
 from pydantic import ValidationError
 from core.domain.validation_models import Transaction, pydantic_keyword_dict
 from core.adapters.ingestors import BatchIngestor, StreamIngestor
-import itertools
 import csv
 from pathlib import Path
 from decimal import Decimal
