@@ -1,12 +1,12 @@
 import pytest
 from pydantic import ValidationError
-from sentinel.domain.validation_models import Transaction, pydantic_keyword_dict
-from sentinel.domain.base import CSVIngestor, StreamIngestor, full_path
+from core.domain.validation_models import Transaction, pydantic_keyword_dict
+from core.adapters.ingestors import BatchIngestor, StreamIngestor
 import itertools
 from pathlib import Path
 from decimal import Decimal
 
-with CSVIngestor(full_path) as data:
+with BatchIngestor(full_path) as data:
     results = list(itertools.islice(data.get_transactions(), 1))
 
     i = 0

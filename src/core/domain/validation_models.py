@@ -31,8 +31,7 @@ balance_schema = condecimal(
 class Transaction(BaseModel):
     """
     A Pydantic class to check if the incoming rows of paysim transaction data
-    conform to the expected types and values
-    per column.
+    conform to the expected types and values per column.
     """
     step: int
     type: Literal['CASH_IN', 'CASH_OUT', 'DEBIT', 'PAYMENT', 'TRANSFER']

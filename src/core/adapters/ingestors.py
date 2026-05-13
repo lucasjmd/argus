@@ -7,8 +7,8 @@ import mysql.connector
 from collections.abc import Generator
 from pathlib import Path
 
-from src.core.adapters.stream_simulator import stream_simulator
-from src.core.domain.base import BaseIngestor
+from core.adapters.stream_simulator import stream_simulator
+from core.domain.base import BaseIngestor
 
 stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
 sys.path.append(str(stream_simulator_dir))
