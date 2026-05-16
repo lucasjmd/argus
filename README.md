@@ -25,7 +25,9 @@ Under construction...
 1. Create an <code>.env</code> file at the root and add your <code>MYSQL_ROOT_PASSWORD</code>.
 2. ```markdown
    docker compose up --build
-
+   ```
+By default the docker compose uses the paysim sample dataset with 100 rows I added to this repo.
+For the full dataset I used during this project, please visit: https://www.kaggle.com/datasets/ealaxi/paysim1/data
 ## Motivation
 
 Argus is a technical sandbox which allows me to experiment with building high-throughput data pipelines in my free-time.
