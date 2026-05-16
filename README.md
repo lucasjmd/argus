@@ -21,8 +21,10 @@ data sources (SQL db's, Kafka, etc.)
 Under construction...
 <br>
 
-## Installation
-Under construction...
+## Quick setup
+1. Create an <code>.env</code> file at the root and add your <code>MYSQL_ROOT_PASSWORD</code>.
+2. ```bash
+   docker compose up --build
 <br>
 
 ## Motivation
