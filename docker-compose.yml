@@ -6,22 +6,33 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    command: --secure-file-priv=/var/lib/mysql-files --local-infile=1
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ./sample-data/sample_paysim.csv:/var/lib/mysql-files/paysim_dataset.csv
     networks:
       - argus-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   app:
     build: .
     container_name: argus-app
     restart: on-failure
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - argus-network
 
 volumes:
   mysql_data:
+    external: true
 
 networks:
   argus-network:
+    external: true
