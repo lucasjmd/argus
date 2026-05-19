@@ -10,7 +10,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init-scripts:/docker-entrypoint-initdb.d
-      - ./paysim_data:/var/lib/mysql-files
+      - ./sample-data:/var/lib/mysql-files
     networks:
       - argus-network
     healthcheck:
