@@ -6,15 +6,18 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    command: --secure-file-priv=/var/lib/mysql-files --local-infile=1
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ./sample-data:/var/lib/mysql-files
     networks:
       - argus-network
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD" ]
+      test: ["CMD-SHELL", "mysql -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'"]
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 15s
 
   app:
     build: .
@@ -28,8 +31,6 @@ services:
 
 volumes:
   mysql_data:
-    external: true
-
 
 networks:
   argus-network:

@@ -12,9 +12,10 @@ CREATE TABLE IF NOT EXISTS transactions (
     oldbalanceDest DECIMAL(15,2),
     newbalanceDest DECIMAL(15,2),
     isFraud TINYINT(1),
-    isFlaggedFraud TINYINT(1),
+    isFlaggedFraud TINYINT(1)
 );
 
-LOAD DATA INFILE '/var/lib/mysql-files/paysim_dataset.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/paysim_sample.csv'
 INTO TABLE transactions
-FIELDS TERMINATED BY ',';
+FIELDS TERMINATED BY ','
+IGNORE 1 LINES;
