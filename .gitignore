@@ -5,3 +5,5 @@ data/
 paysim_data/
 temp.py
 .env
+docker-compose.yml
+01-init.sql
