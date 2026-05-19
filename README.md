@@ -30,8 +30,7 @@ Under construction...
 By default the docker compose uses the paysim sample dataset with 100 rows I added to this repo.
 For the full dataset I used during this project, please visit: https://www.kaggle.com/datasets/ealaxi/paysim1/data and
 then replace the sample csv file. Make sure to change references to the file in the <code>01-init.sql</code> file in
-init-scripts. <b>Note:</b> The full file is ca. 6 million rows and loading it into the MySQL container db can take a few minutes
-the first time.
+init-scripts.
 ## Motivation
 
 Argus is a technical sandbox which allows me to experiment with building high-throughput data pipelines in my free-time.
