@@ -6,11 +6,9 @@ import mysql.connector
 
 from collections.abc import Generator
 from pathlib import Path
-from pydantic import ValidationError
 
 from core.adapters.stream_simulator import stream_simulator
 from core.domain.base import BaseIngestor
-from core.domain.validation_models import Transaction
 
 stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
 sys.path.append(str(stream_simulator_dir))
@@ -55,8 +53,7 @@ class BatchIngestor(BaseIngestor):
 
     def get_transactions(self):
         """
-        Generator that yields each row of the table and validates it by transforming the
-        raw rows into Transaction objects as defined in validation_models with Pydantic.
+        Generator that yields each row of the transactions table from a mysql db.
         It defines no .send method or finishing return statement.
 
 
@@ -68,11 +65,7 @@ class BatchIngestor(BaseIngestor):
         
         #iterate over the cursos directly to avoid loading whole table into memory
         for row in self.cursor:
-            try:
-                yield Transaction(**row)
-            except ValidationError as e:
-                logger.warning(f'Invalid row!: {e}')
-                continue
+            yield row
 
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
