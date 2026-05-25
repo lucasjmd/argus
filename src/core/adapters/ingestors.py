@@ -2,21 +2,15 @@ import csv
 import itertools
 import sys
 import time
-import mysql.connector
 
 from collections.abc import Generator
 from pathlib import Path
 
-from core.adapters.stream_simulator import stream_simulator
 from core.domain.base import BaseIngestor
-
-stream_simulator_dir = Path(__file__).resolve().parents[3] / 'tests'
-sys.path.append(str(stream_simulator_dir))
 
 class BatchIngestor(BaseIngestor):
     """
-    Concrete ingestor engine class for ingesting 'batch' transaction data
-    coming from a MySQL db container.
+    Concrete ingestor engine class for ingesting 'batch' transaction data coming from a CSV.
 
     This concrete version of the BaseIngestor abstract base class specifies
     how batch or static data has to be ingested. It can be used as a context
@@ -30,25 +24,25 @@ class BatchIngestor(BaseIngestor):
 
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, data_source: str, throttle: bool = True):
+        self.data_source = data_source
+        self.throttle = throttle
+        self.file_handle = None
+        self.reader = None
 
     def __enter__(self):
         """
         Allows transaction data to be accessed via a context manager. 
         Sets the parameters to be passed to the terminal/MySQL shell.
         """
-        self.config = {
-            'user': 'root',
-            'password': 'secret',
-            'host': 'mysql-db',
-            'database': 'paysim'
-            }
-        # Opens network to MySQL container
-        self.conn = mysql.connector.connect(**self.config)
-        # Pass commands to the db via the cursor
-        self.cursor = self.conn.cursor(dictionary=True)
-        
+        print('Connecting to data source...')
+        try:
+            self.file_handle = open(self.data_source, mode='r', encoding='utf-8')
+        except FileNotFoundError:
+            print('Could not data source file.')
+            raise
+
+        self.reader = csv.DictReader(self.file_handle)
         return self
 
     def get_transactions(self):
@@ -61,22 +55,20 @@ class BatchIngestor(BaseIngestor):
             A generator object that can iterate through the rows of
             the batch/static data.
         """
-        self.cursor.execute("SELECT * FROM transactions")
-        
-        #iterate over the cursos directly to avoid loading whole table into memory
-        for row in self.cursor:
+        for row in self.reader:
+            if self.throttle:
+                time.sleep(0.1)
+
             yield row
 
-
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        if exc_type is StopIteration:
-            print('Reached the end of the batch.')
-            self.conn.close()
-            return True
+        if self.file_handle:
+            print('Closing connection to CSV source.')
+            self.file_handle.close()
 
-        self.conn.close()
-        print("Encountered an error in reading the batch.")
-        return False
+        if exc_type and exc_type is not StopIteration:
+            print(f'Reading file interrupted due to error: {exc_value}')
+            return False
 
 class StreamIngestor(BaseIngestor):
     """
@@ -140,9 +132,10 @@ class StreamIngestor(BaseIngestor):
 
 
 if __name__ == '__main__':
-    with BatchIngestor() as data:
-        for transaction in data.get_transactions():
-            print(transaction)
+    csv_path = 'paysim_data/paysim_dataset.csv'
+    with BatchIngestor(data_source=csv_path, throttle=True) as batch:
+        for tx in batch.get_transactions():
+            print(tx)
 
     # with StreamIngestor('paysim_dataset.csv', True) as data:
     #     for tx in data.get_transactions():
