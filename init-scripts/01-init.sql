@@ -14,8 +14,3 @@ CREATE TABLE IF NOT EXISTS transactions (
     isFraud TINYINT(1),
     isFlaggedFraud TINYINT(1)
 );
-
-LOAD DATA INFILE '/var/lib/mysql-files/paysim_sample.csv'
-INTO TABLE transactions
-FIELDS TERMINATED BY ','
-IGNORE 1 LINES;
