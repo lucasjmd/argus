@@ -17,21 +17,29 @@ class MySQLTransactions:
             'host': os.getenv('MYSQL_HOST')
         }
 
-    def save(self, tx: Transaction):
+    def save_batch(self, transactions: list[Transaction]):
         conn = mysql.connector.connect(**self.config)
         cursor = conn.cursor()
 
         query = """
-                    INSERT INTO transactions (step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, nameDest, oldbalanceDest, newbalanceDest, isFraud, isFlaggedFraud)
+                    INSERT INTO transactions (
+                        step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, 
+                        nameDest, oldbalanceDest, newbalanceDest, isFraud, isFlaggedFraud
+                    )
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
-        values = (
-            tx.step, tx.type, float(tx.amount), tx.nameOrig, float(tx.oldbalanceOrg),
-            float(tx.newbalanceOrig), tx.nameDest, float(tx.oldbalanceDest),
-            float(tx.newbalanceDest), tx.isFraud, tx.isFlaggedFraud
-        )
 
-        cursor.execute(query, values)
+        # Maps objects to raw database tuples
+        values = [
+            (
+                tx.step, tx.type, float(tx.amount), tx.nameOrig, float(tx.oldbalanceOrg),
+                float(tx.newbalanceOrig), tx.nameDest, float(tx.oldbalanceDest),
+                float(tx.newbalanceDest), tx.isFraud, tx.isFlaggedFraud
+            )
+            for tx in transactions
+        ]
+
+        cursor.executemany(query, values)
         conn.commit()
         cursor.close()
         conn.close()
