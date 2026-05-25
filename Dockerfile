@@ -1,6 +1,7 @@
-FROM python:3.12
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 WORKDIR /argus
+ENV UV_COMPILE_BYTECODE=1
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-install-project
 COPY . .
-RUN pip install uv
-RUN uv sync
-CMD ["uv","run","python","-m","src.core.adapters.ingestors"]
+CMD ["uv","run","python","main.py"]
