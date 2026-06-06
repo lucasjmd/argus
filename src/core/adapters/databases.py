@@ -43,3 +43,41 @@ class MySQLTransactions:
         conn.commit()
         cursor.close()
         conn.close()
+
+
+
+    def get_sample_transactions() -> dict:
+
+        # connection =
+
+        df = pd.read_sql('SELECT * FROM transactions LIMIT 100', con = connection)
+
+        json_output = df.to_dict(orient='records', data_format='iso')
+
+        return json_output
+
+    def get_transactions_above_amount(value: float) -> dict:
+
+        df = pd.read_sql(f'SELECT * FROM transactions WHERE amount >= {value} LIMIT 1000')
+
+        json_output = df.to_dict(orient='records', data_format='iso')
+
+        return json_output
+
+    def get_transactions_orig_account(account_id: str) -> dict:
+
+
+        df = pd.read_sql(f"SELECT * FROM transactions WHERE nameOrig = '{account_id}' LIMIT 1000")
+
+        json_output = df.to_dict(orient='records', data_format='iso')
+
+        return json_output
+
+    def get_transactions_dest_account(account_id: str) -> dict:
+        df = pd.read_sql(f"SELECT * FROM transactions WHERE nameDest = '{account_id}' LIMIT 1000")
+
+        json_output = df.to_dict(orient='records', data_format='iso')
+
+        return json_output
+
+#TODO: Add get for fraudulent tx
