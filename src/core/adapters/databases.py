@@ -1,5 +1,7 @@
 import mysql.connector
 import os
+import pandas as pd
+
 
 from core.domain.validation_models import Transaction
 
@@ -46,37 +48,50 @@ class MySQLTransactions:
 
 
 
-    def get_sample_transactions() -> dict:
+    def get_sample_transactions(self) -> list:
 
-        # connection =
+        connection = mysql.connector.connect(**self.config)
 
         df = pd.read_sql('SELECT * FROM transactions LIMIT 100', con = connection)
 
-        json_output = df.to_dict(orient='records', data_format='iso')
+        connection.close()
+
+        json_output = df.to_dict(orient='records')
 
         return json_output
 
-    def get_transactions_above_amount(value: float) -> dict:
+    def get_transactions_above_amount(self, value: float) -> list:
 
-        df = pd.read_sql(f'SELECT * FROM transactions WHERE amount >= {value} LIMIT 1000')
+        connection = mysql.connector.connect(**self.config)
 
-        json_output = df.to_dict(orient='records', data_format='iso')
+        query = 'SELECT * FROM transactions WHERE amount >= %s LIMIT 1000'
 
-        return json_output
+        df = pd.read_sql(query, con = connection, params = [value])
 
-    def get_transactions_orig_account(account_id: str) -> dict:
+        connection.close()
 
-
-        df = pd.read_sql(f"SELECT * FROM transactions WHERE nameOrig = '{account_id}' LIMIT 1000")
-
-        json_output = df.to_dict(orient='records', data_format='iso')
+        json_output = df.to_dict(orient='records')
 
         return json_output
 
-    def get_transactions_dest_account(account_id: str) -> dict:
-        df = pd.read_sql(f"SELECT * FROM transactions WHERE nameDest = '{account_id}' LIMIT 1000")
+    def get_transactions_orig_account(self, account_id: str) -> list:
 
-        json_output = df.to_dict(orient='records', data_format='iso')
+        connection = mysql.connector.connect(**self.config)
+        query = 'SELECT * FROM transactions WHERE nameOrig = %s LIMIT 1000'
+        df = pd.read_sql(query, con = connection, params = [account_id])
+        connection.close()
+        json_output = df.to_dict(orient='records')
+
+        return json_output
+
+    def get_transactions_dest_account(self, account_id: str) -> list:
+
+        connection = mysql.connector.connect(**self.config)
+        query = 'SELECT * FROM transactions WHERE nameDest = %s LIMIT 1000'
+        df = pd.read_sql(query, con = connection, params=[account_id])
+        connection.close()
+
+        json_output = df.to_dict(orient='records')
 
         return json_output
 
