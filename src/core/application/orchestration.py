@@ -3,7 +3,7 @@ from pydantic import ValidationError
 
 from core.adapters.ingestors import BatchIngestor
 from core.domain.validation_models import Transaction
-from core.adapters.writer import MySQLTransactions
+from core.adapters.databases import MySQLTransactions
 
 class FraudDetectionPipeline:
 
