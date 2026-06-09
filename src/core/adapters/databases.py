@@ -48,11 +48,20 @@ class MySQLTransactions:
 
 
 
-    def get_sample_transactions(self) -> list:
+    def get_transactions(self, page, limit) -> list:
+
+        offset = (page - 1) * limit
 
         connection = mysql.connector.connect(**self.config)
 
-        df = pd.read_sql('SELECT * FROM transactions LIMIT 100', con = connection)
+        query = """
+            SELECT amount, nameOrig, oldbalanceOrg, newbalanceOrig, nameDest, oldbalanceDest, newbalanceDest
+            FROM transactions
+            LIMIT %s
+            OFFSET %s
+        """
+
+        df = pd.read_sql(query, con = connection, params = [limit, offset])
 
         connection.close()
 
@@ -95,4 +104,14 @@ class MySQLTransactions:
 
         return json_output
 
+    def get_sum_account(self, account_id: str) -> list:
+
+        connection = mysql.connector.connect(**self.config)
+        query = 'SELECT * FROM transactions WHERE nameDest = %s LIMIT 1000'
+        df = pd.read_sql(query, con = connection, params=[account_id])
+        connection.close()
+
+        json_output = df.to_dict(orient='records')
+
+        return json_output
 #TODO: Add get for fraudulent tx
