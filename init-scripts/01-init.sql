@@ -14,3 +14,5 @@ CREATE TABLE IF NOT EXISTS transactions (
     isFraud TINYINT(1),
     isFlaggedFraud TINYINT(1)
 );
+
+ALTER TABLE transactions ADD INDEX idx_name_orig (nameOrig);

@@ -30,7 +30,7 @@ def get_tx_dest_account_json(account_id: str) -> list:
     return db.get_transactions_dest_account(account_id)
 
 @app.get('/transactions/summary/{account_id}')
-def get_sum_account_json(account_id: str) -> list:
+def get_sum_account_json(account_id: str) -> dict:
     txs = db.get_transactions_orig_account(account_id)
 
     if not txs:

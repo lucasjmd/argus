@@ -73,7 +73,7 @@ class MySQLTransactions:
 
         connection = mysql.connector.connect(**self.config)
 
-        query = 'SELECT * FROM transactions WHERE amount >= %s LIMIT 1000'
+        query = 'SELECT * FROM transactions WHERE amount >= %s'
 
         df = pd.read_sql(query, con = connection, params = [value])
 
@@ -86,7 +86,7 @@ class MySQLTransactions:
     def get_transactions_orig_account(self, account_id: str) -> list:
 
         connection = mysql.connector.connect(**self.config)
-        query = 'SELECT * FROM transactions WHERE nameOrig = %s LIMIT 1000'
+        query = 'SELECT * FROM transactions WHERE nameOrig = %s'
         df = pd.read_sql(query, con = connection, params = [account_id])
         connection.close()
         json_output = df.to_dict(orient='records')
@@ -96,7 +96,7 @@ class MySQLTransactions:
     def get_transactions_dest_account(self, account_id: str) -> list:
 
         connection = mysql.connector.connect(**self.config)
-        query = 'SELECT * FROM transactions WHERE nameDest = %s LIMIT 1000'
+        query = 'SELECT * FROM transactions WHERE nameDest = %s'
         df = pd.read_sql(query, con = connection, params=[account_id])
         connection.close()
 
@@ -104,14 +104,5 @@ class MySQLTransactions:
 
         return json_output
 
-    def get_sum_account(self, account_id: str) -> list:
 
-        connection = mysql.connector.connect(**self.config)
-        query = 'SELECT * FROM transactions WHERE nameDest = %s LIMIT 1000'
-        df = pd.read_sql(query, con = connection, params=[account_id])
-        connection.close()
-
-        json_output = df.to_dict(orient='records')
-
-        return json_output
 #TODO: Add get for fraudulent tx
