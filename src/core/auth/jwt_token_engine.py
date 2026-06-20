@@ -1,4 +1,4 @@
-from jose import jwt
+from jose import jwt, JWTError
 from dotenv import load_dotenv
 import os
 import pytz
@@ -18,3 +18,7 @@ def create_jwt(data: dict) -> str:
     token = jwt.encode(data, secret, algorithm=algo)
 
     return token
+
+def decode_jwt(token: str) -> dict:
+    return jwt.decode(token, secret, algorithm=algo)
+
