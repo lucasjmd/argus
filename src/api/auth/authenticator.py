@@ -2,10 +2,10 @@ from fastapi import Depends, HTTPException, status
 from jose import JWTError
 
 from fastapi.security import OAuth2PasswordBearer
-from api.auth.jwt_token_engine import decode_jwt
+from src.api.auth.jwt_token_engine import decode_jwt
 
 # create token extractor
-oauth2_scheme = OAuth2PasswordBearer(tokenurl='login')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
 
 def validate_user(token: str = Depends(oauth2_scheme)):

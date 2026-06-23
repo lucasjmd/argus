@@ -9,7 +9,7 @@ app = FastAPI()
 db = MySQLTransactions()
 
 @app.get('/')
-def root(user_id: str = Depends(validate_user)):
+def root():
     return {'Hello': 'World!'}
 
 @app.get('/transactions')
