@@ -104,5 +104,38 @@ class MySQLTransactions:
 
         return json_output
 
+    def create_user(self, username, hashed_password):
+
+        connection = mysql.connector.connect(**self.config)
+        cursor = connection.cursor()
+        query = 'INSERT IGNORE INTO api_users (username, hashed_password) VALUES (%s, %s);'
+
+        cursor.execute(query, (username, hashed_password))
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    def get_user_by_username(self, username):
+
+        connection = mysql.connector.connect(**self.config)
+        cursor = connection.cursor()
+
+        query = 'SELECT hashed_password FROM api_users WHERE username = %s'
+
+        cursor.execute(query, (username,))
+
+        row = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        if row:
+            hashed_password = row[0]
+            return hashed_password
+
+        else:
+            return None
+
 
 #TODO: Add get for fraudulent tx

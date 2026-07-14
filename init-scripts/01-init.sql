@@ -16,3 +16,9 @@ CREATE TABLE IF NOT EXISTS transactions (
 );
 
 ALTER TABLE transactions ADD INDEX idx_name_orig (nameOrig);
+
+CREATE TABLE IF NOT EXISTS api_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    hashed_password VARCHAR(255) NOT NULL
+);

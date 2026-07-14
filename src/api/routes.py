@@ -1,12 +1,23 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, status
 from src.core.adapters.databases import MySQLTransactions
 from src.api.auth.authenticator import validate_user
+from src.api.auth.passwords import hash_user_password
 from pydantic import BaseModel
+from fastapi.security import OAuth2PasswordRequestForm
 from typing import List, Dict
+
+from src.api.auth.jwt_token_engine import create_jwt
+from src.api.auth.passwords import validate_password_attempt
+
 
 app = FastAPI()
 
 db = MySQLTransactions()
+
+# Pydantic schema so registration creds are sent in a secure json body
+class RegisterSchema(BaseModel):
+    username: str
+    password: str
 
 @app.get('/')
 def root():
@@ -52,4 +63,32 @@ def get_sum_account_json(account_id: str, user_id: str = Depends(validate_user))
         'recent_transactions': txs[:100]
     }
 
-#TODO: Add get route for fraudulent tx
+@app.post('/register')
+def register_user(register_data: RegisterSchema):
+
+    user_exists = db.get_user_by_username(register_data.username)
+    if user_exists:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Username already registred!'
+        )
+
+    hashed_password = hash_user_password(register_data.password)
+    db.create_user(register_data.username, hashed_password)
+    return {'message': 'User succesfully registered!'}
+
+
+@app.post('/login')
+def user_login(login_data: OAuth2PasswordRequestForm = Depends()):
+    hashed_password = db.get_user_by_username(login_data.username)
+
+    if not hashed_password or not validate_password_attempt(login_data.password, hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Incorrect username or password!'
+        )
+
+    access_token = create_jwt(data={'sub': login_data.username})
+
+    return {'access_token': access_token, 'token_type': 'bearer'}
+

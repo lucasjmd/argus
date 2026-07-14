@@ -19,8 +19,8 @@ def validate_password_attempt(password_attempt: str, stored_password: str) -> bo
     Compares login attempt password with hashed password
 
     :param
-        - password_attempt: str The user's password attempt
-        - stored_password: str The user's stored password
+        - password_attempt: str The user's plain password attempt
+        - stored_password: str The user's encoded stored password
 
     :return: bool True if passwords match, False otherwise
     """
