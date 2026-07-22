@@ -24,5 +24,5 @@ def create_jwt(data: dict) -> str:
     return token
 
 def decode_jwt(token: str) -> dict:
-    return jwt.decode(token, secret, algorithm=algo)
+    return jwt.decode(token, secret, algorithms=[algo])
 
