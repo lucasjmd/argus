@@ -1,13 +1,11 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from src.core.adapters.databases import MySQLTransactions
 from src.api.auth.authenticator import validate_user
-from src.api.auth.passwords import hash_user_password
+from src.api.auth.passwords import hash_user_password, validate_password_attempt
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordRequestForm
-from typing import List, Dict
 
 from src.api.auth.jwt_token_engine import create_jwt
-from src.api.auth.passwords import validate_password_attempt
 
 
 app = FastAPI()

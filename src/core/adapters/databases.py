@@ -34,7 +34,7 @@ class MySQLTransactions:
         # Maps objects to raw database tuples
         values = [
             (
-                tx.step, tx.type, float(tx.amount), tx.nameOrig, float(tx.oldbalanceOrg),
+                tx.step, tx.type, tx.amount, tx.nameOrig, float(tx.oldbalanceOrg),
                 float(tx.newbalanceOrig), tx.nameDest, float(tx.oldbalanceDest),
                 float(tx.newbalanceDest), tx.isFraud, tx.isFlaggedFraud
             )
@@ -137,5 +137,3 @@ class MySQLTransactions:
         else:
             return None
 
-
-#TODO: Add get for fraudulent tx
