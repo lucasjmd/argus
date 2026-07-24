@@ -2,7 +2,6 @@ from jose import jwt, JWTError
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 import os
-import pytz
 
 load_dotenv()
 
@@ -14,7 +13,7 @@ def create_jwt(data: dict) -> str:
 
     payload = data.copy()
 
-    expiry_dt = datetime.now(pytz.timezone('Europe/Amsterdam'))
+    expiry_dt = datetime.now(timezone.utc)
 
     expire_td = timedelta(seconds=int(expire))
     payload['exp'] = expiry_dt + expire_td
