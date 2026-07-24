@@ -3,23 +3,6 @@ from typing import Literal
 from pydantic import BaseModel, Field, condecimal
 
 # constrained schema for balance-related columns
-
-# Setting a dictionary that matches the columns of the data, for easy keyword
-# argument passing to the Transaction class
-pydantic_keyword_dict = {
-    'step':None,
-    'type': None,
-    'amount': None,
-    'nameOrig': None,
-    'oldbalanceOrg': None,
-    'newbalanceOrig': None,
-    'nameDest': None,
-    'oldbalanceDest': None,
-    'newbalanceDest': None,
-    'isFraud': None,
-    'isFlaggedFraud':None,
-}
-
 # Pydantic schema for all balance-related columns
 balance_schema = condecimal(
         strict=False,
