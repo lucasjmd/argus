@@ -1,155 +1,93 @@
 import pytest
 from core.domain.base import BaseIngestor
-from core.adapters.ingestors import BatchIngestor, StreamIngestor
+from core.adapters.ingestors import BatchIngestor
 import itertools
 
 
-header_sample = 'step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, nameDest, oldbalanceDest, newbalanceDest,\
- isFraud, isFlaggedFraud'
-row_sample_1 = '1,PAYMENT,9839.64,C1231006815,170136.0,160296.36,M1979787155,0.0,0.0,0,0'
-row_sample_2 = '2,TRANSFER,1234.56,C840083671,1234567.1,89101112.13,M408069119,1.0,0.2,3,4'
+HEADER_SAMPLE = 'step,type,amount,nameOrig,oldbalanceOrg,newbalanceOrig,nameDest,oldbalanceDest,newbalanceDest,\
+isFraud,isFlaggedFraud'
+ROW_SAMPLE_1 = '1,PAYMENT,9839.64,C1231006815,170136.0,160296.36,M1979787155,0.0,0.0,0,0'
+
+@pytest.fixture
+def csv_file_create(tmp_path):
+    """
+    Generates temporary CSV files with given content.
+    """
+    def _create_csv(content: str) -> str:
+        file_path = tmp_path / 'test_tx_data.csv'
+        file_path.write_text(content, encoding='utf-8')
+        return file_path
+
+    return _create_csv
 
 ## UNIT TESTS
 
 class TestBatchLogic:
-
+    """
+    Test CSV batch ingestion logic.
+    """
     def test_instantiate_csvingestor(self):
-        BatchIngestor('abc')
+        """
+        Ensures BatchIngestor initialises with a valid filepath
+        """
+        ingestor = BatchIngestor('dummy_path.csv')
+        assert ingestor.data_source == 'dummy_path.csv'
 
     def test_instant_csvingestor_wrongtype(self):
+        """
+        Ensures passing a non-string arg raises error
+        """
         with pytest.raises((TypeError, AttributeError)):
-            with BatchIngestor(1.5) as data:
+            with BatchIngestor(1.5, throttle=False) as data:
                 list(data.get_transactions())
 
-    def test_empty_batch_data(self, tmp_path):
-        unit_test_data_dir = tmp_path / 'data'
-        unit_test_data_dir.mkdir()
-        test_filestring = unit_test_data_dir / 'test_tx_data.csv'
+    def test_empty_batch_data(self, csv_file_create):
+        """
+        Ensures CSV with only header row yields zero transactions.
+        """
+        csv_path = csv_file_create(HEADER_SAMPLE + '\n')
 
-        content = '\n'.join([header_sample, ''])
-        test_filestring.write_text(content)
-
-        with BatchIngestor(test_filestring) as data:
+        with BatchIngestor(csv_path, throttle=False) as data:
             results = list(data.get_transactions())
 
         assert len(results) == 0
 
-    def test_csv_ingestor_close(self, tmp_path):
-        unit_test_data_dir = tmp_path / 'data'
-        unit_test_data_dir.mkdir()
-        test_filestring = unit_test_data_dir / 'test_tx_data.csv'
+    def test_csv_ingestor_close(self, csv_file_create):
+        """
+        Assert that underlying csv file is closed upon exiting
+        """
+        csv_path = csv_file_create(f'{HEADER_SAMPLE}\n{ROW_SAMPLE_1}')
 
-        content = '\n'.join([header_sample, row_sample_1])
-        test_filestring.write_text(content)
-
-        with BatchIngestor(test_filestring) as data:
+        with BatchIngestor(csv_path, throttle=False) as data:
             for row in data.get_transactions():
                 pass
 
-        # Update file_obj to file_handle here:
         assert data.file_handle.closed
 
-    def test_batch_ingestor_headers(self, tmp_path):
-        unit_test_data_dir = tmp_path / 'data'
-        unit_test_data_dir.mkdir()
-        test_filestring = unit_test_data_dir / 'test_tx_data.csv'
+    def test_batch_ingestor_headers(self, csv_file_create):
+        """
+         Checks that rows are correctly matched with header keys in dict
+        """
+        csv_path = csv_file_create(f'{HEADER_SAMPLE}\n{ROW_SAMPLE_1}')
 
-        content = '\n'.join([header_sample, row_sample_1])
-        test_filestring.write_text(content)
-
-        with BatchIngestor(test_filestring) as data:
+        with BatchIngestor(csv_path, throttle=False) as data:
             results = list(itertools.islice(data.get_transactions(), 2))
 
         assert len(results) == 1
+        assert results[0]['type'] == 'PAYMENT'
+        assert results[0]['nameOrig'] == 'C1231006815'
 
-# class TestStreamLogic:
-#
-#     def test_streamingestor_type_raise(self):
-#         with pytest.raises(TypeError):
-#             stream = StreamIngestor('test.xlsx')
-#             next(stream)
-
-    ## Finish when connected with actual stream
-    # def test_stream_ingestor_no_headers(self, tmp_path):
-    #     unit_test_data_dir = tmp_path / 'data'
-    #     unit_test_data_dir.mkdir()
-    #     test_filestring = unit_test_data_dir / 'test_tx_data.csv'
-    #
-    #     content = '\n'.join([header_sample, row_sample_1])
-    #     test_filestring.write_text(content)
-    #
-    #     with StreamIngestor(test_filestring, throttle = False) as data:
-    #         results = list(itertools.islice(data.get_transactions(), 1))
-    #
-    #     assert len(results) == 1
-
-# class TestStreamSimulator:
-#
-#     def test_instant_streamsim(self):
-#         stream_simulator('abc.csv')
-#
-#     def test_stream_sim_data_type_raise(self):
-#         with pytest.raises(TypeError) as e:
-#             generator_obj = stream_simulator('test.xlsx')
-#             next(generator_obj)
-#
-#     def test_stream_sim_no_source(self):
-#         with pytest.raises(ValueError):
-#             stream = stream_simulator('')
-#             next(stream)
-#
-#     def test_nonexistant_file_stream_sim(self):
-#         with pytest.raises(FileNotFoundError):
-#             stream = stream_simulator('non_data.csv')
-#             next(stream)
-#
-#     def test_empty_stream_data(self, tmp_path):
-#         unit_test_data_dir = tmp_path / 'data'
-#         unit_test_data_dir.mkdir()
-#         test_filestring = unit_test_data_dir / 'test_tx_data.csv'
-#
-#         content = '\n'.join([header_sample, ''])
-#         test_filestring.write_text(content)
-#
-#         stream = stream_simulator(str(test_filestring))
-#         results = list(itertools.islice(stream, 2))
-#
-#         assert results == [None, None]
-#
-#     def test_stream_sim_loop(self, tmp_path):
-#         unit_test_data_dir = tmp_path / 'data'
-#         unit_test_data_dir.mkdir()
-#         test_filestring = unit_test_data_dir / 'test_tx_data.csv'
-#
-#         content = '\n'.join([header_sample, row_sample_2, row_sample_2])
-#         test_filestring.write_text(content)
-#
-#         stream = stream_simulator(str(test_filestring))
-#         results = list(itertools.islice(stream, 4))
-#
-#         assert len(results) == 4
-#         assert results[0] == results[2]
-#         assert results[1] == results[3]
-#
-#     def test_stream_sim_data_read(self, tmp_path):
-#         unit_test_data_dir = tmp_path / 'data'
-#         unit_test_data_dir.mkdir()
-#         test_filestring = unit_test_data_dir / 'test_tx_data.csv'
-#
-#         content = '\n'.join([header_sample, row_sample_1])
-#         test_filestring.write_text(content)
-#
-#         gen_obj = stream_simulator(str(test_filestring))
-#
-#         row_data = next(gen_obj)
-#         assert row_data == ['1', 'PAYMENT', '9839.64', 'C1231006815', '170136.0', '160296.36', 'M1979787155', '0.0', \
-#                             '0.0', '0', '0']
-
-class TestOther:
-
+class TestABC:
+    """
+    Checks interface of abstract base class
+    """
     def test_cannot_instantiate_abc(self):
+        """
+        Tests if BaseIngestor cannot be instantiated directly (without concrete implementation)
+        """
         with pytest.raises(TypeError) as e:
             BaseIngestor()
+
 
 
 
