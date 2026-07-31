@@ -1,13 +1,10 @@
 import pytest
 from pydantic import ValidationError
-from core.domain.validation_models import Transaction, pydantic_keyword_dict
-from core.adapters.ingestors import BatchIngestor, StreamIngestor
-import csv
-from pathlib import Path
 from decimal import Decimal
 
-# reference to data locally saved as csv to be able to test without having to start mysql docker container
-# or messing with networks
+from core.domain.validation_models import Transaction
+
+# Base dict of valid transaction data used as a template across tests
 VALID_TEST_TX = {
     'step': '1',
     'type': 'PAYMENT',
@@ -22,16 +19,10 @@ VALID_TEST_TX = {
     'isFlaggedFraud': '0',
 }
 
-missing_keyword_dict = pydantic_keyword_dict.copy()
-missing_keyword_dict['oldbalanceOrg'] = None
-
-wrongtype_keyword_dict = pydantic_keyword_dict.copy()
-wrongtype_keyword_dict['step'] = 'shouldBeInt'
-
-emptystring_keyword_dict = pydantic_keyword_dict.copy()
-emptystring_keyword_dict['type'] = ''
-
 def test_incorrect_account():
+    """
+    Ensure that invalid orig and dest account formats are caught
+    """
     bad_orig = VALID_TEST_TX.copy()
     bad_orig['nameOrig'] = 'X123456789'
     with pytest.raises(ValidationError):
@@ -43,24 +34,36 @@ def test_incorrect_account():
         Transaction(**bad_dest)
 
 def test_empty_string():
+    """
+    Ensure that an empty string in a required text field is caught
+    """
     bad_data = VALID_TEST_TX.copy()
     bad_data['type'] = ''
     with pytest.raises(ValidationError):
         tx = Transaction(**bad_data)
 
 def test_missing_field():
+    """
+    Ensure that None for a required field is caught
+    """
     bad_data = VALID_TEST_TX.copy()
     bad_data['oldbalanceOrg'] = None
     with pytest.raises(ValidationError):
         tx = Transaction(**bad_data)
 
 def test_incorrect_type():
+    """
+    Check that passing a incorrect type is caught
+    """
     bad_data = VALID_TEST_TX.copy()
     bad_data['step'] = 'shouldBeInt'
     with pytest.raises(ValidationError):
         tx = Transaction(**bad_data)
 
 def test_simple_row_pass():
+    """
+    Ensure that a valid dict is correctly turned into a Transaction instance with expected types
+    """
     tx = Transaction(**VALID_TEST_TX)
 
     assert isinstance(tx.step, int)
