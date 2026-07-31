@@ -4,10 +4,11 @@ def hash_user_password(password: str) -> str:
     """
     Hashes incoming api user passwords for secure storage in database
 
-    :param password: str The user's plain-text password.
-    :return: str User's hashed password
+    :param password: The user's plain-text password.
+    :return: User's hashed password
     """
-    password_bytes = password.encode('utf-8')
+
+    password_bytes = password.encode('utf-8') # hashpw expects bytes
     hashed_bytes = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
 
     hashed_str = hashed_bytes.decode('utf-8')
@@ -18,11 +19,10 @@ def validate_password_attempt(password_attempt: str, stored_password: str) -> bo
     """
     Compares login attempt password with hashed password
 
-    :param
-        - password_attempt: str The user's plain password attempt
-        - stored_password: str The user's encoded stored password
+    :param password_attempt: The user's plain password attempt
+    :param stored_password: The user's encoded stored password
 
-    :return: bool True if passwords match, False otherwise
+    :return: True if passwords match, False otherwise
     """
 
     stored_password_bytes = stored_password.encode('utf-8')

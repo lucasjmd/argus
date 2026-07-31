@@ -3,31 +3,28 @@ from abc import ABC, abstractmethod
 
 class BaseIngestor(ABC):
     """
-    Abstract base class for ingesting transaction data in various forms.
+    Abstract base class for ingesting transaction data from various sources (e.g. csv, stream)
 
-    This is the base class for various database connection subclasses.
-    It is meant as a contract that defines the form concrete classes
-    (the specific source ingestors) will have to follow. It is also
-    set up to allow it to be used as a custom context manager.
-
-    Args:
-        None
-
-    Attributes:
-        None
-
+    Defines a contract for all ingestor implementations and enforces context manager usage
     """
 
     @abstractmethod
     def __enter__(self):
+        """Opens connections required by the ingestor."""
         pass
 
     @abstractmethod
     def get_transactions(self):
+        """
+        Yields transaction records as dictionaries
+
+        :return: A generator yielding transaction data dicts
+        """
         pass
 
     @abstractmethod
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Safely closes connections upon exit"""
         pass
 
 

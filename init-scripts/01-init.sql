@@ -1,6 +1,8 @@
+--Database initialisation for argus transaction validator engine
 CREATE DATABASE IF NOT EXISTS paysim;
 USE paysim;
 
+-- Transaction records to be populated with pipeline
 CREATE TABLE IF NOT EXISTS transactions (
     step INT,
     type VARCHAR(20),
@@ -15,8 +17,10 @@ CREATE TABLE IF NOT EXISTS transactions (
     isFlaggedFraud TINYINT(1)
 );
 
+-- Adding indexing to optimise API lookup performance
 ALTER TABLE transactions ADD INDEX idx_name_orig (nameOrig);
 
+-- User accounts for API JWT auth
 CREATE TABLE IF NOT EXISTS api_users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,

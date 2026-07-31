@@ -2,16 +2,19 @@ import mysql.connector
 import os
 import pandas as pd
 
-
 from core.domain.validation_models import Transaction
 
 
 class MySQLTransactions:
     """
-    Adapter responsible for writing validated transaction to MySQL db for persistent storage.
+    Adapter responsible for writing validated transactions, reading transactions for api endpoints
+    and writing/reading api user credentials to MySQL db for persistent storage.
     """
 
     def __init__(self):
+        """
+        Initialises database connection credentials from env variables.
+        """
         self.config = {
             'user': 'root',
             'password': os.getenv('MYSQL_ROOT_PASSWORD'),
@@ -19,7 +22,11 @@ class MySQLTransactions:
             'host': os.getenv('MYSQL_HOST')
         }
 
-    def save_batch(self, transactions: list[Transaction]):
+    def save_batch(self, transactions: list[Transaction]) -> None:
+        """
+        Bulk inserts a list of validated transactions into the db.
+        :param transactions: List of validated Transaction objects
+        """
         conn = mysql.connector.connect(**self.config)
         cursor = conn.cursor()
 
@@ -41,14 +48,20 @@ class MySQLTransactions:
             for tx in transactions
         ]
 
-        cursor.executemany(query, values)
+        cursor.executemany(query, values) # batch flushing to db, avoids individual network traffic per tx
         conn.commit()
         cursor.close()
         conn.close()
 
 
+    def get_transactions(self, page: int = 1, limit: int = 50) -> list:
+        """
+        Retrieves paginated list of transaction records.
 
-    def get_transactions(self, page, limit) -> list:
+        :param page: Page number to fetch (1-indexed)
+        :param limit: Maximum number of transactions per page
+        :return: A list of transaction records represented as dictionaries
+        """
 
         offset = (page - 1) * limit
 
@@ -70,6 +83,12 @@ class MySQLTransactions:
         return json_output
 
     def get_transactions_above_amount(self, value: float) -> list:
+        """
+        Fetches all transactions where the transfer amount is greater than or equal to a taret value.
+
+        :param value: Minimum transaction amount
+        :return: A list of transaction records as dicts
+        """
 
         connection = mysql.connector.connect(**self.config)
 
@@ -84,6 +103,12 @@ class MySQLTransactions:
         return json_output
 
     def get_transactions_orig_account(self, account_id: str) -> list:
+        """
+        Retrieves all transactions originating from a specific account id.
+
+        :param account_id: Originating account identifier
+        :return: A list of transaction records as dicts
+        """
 
         connection = mysql.connector.connect(**self.config)
         query = 'SELECT * FROM transactions WHERE nameOrig = %s'
@@ -94,6 +119,12 @@ class MySQLTransactions:
         return json_output
 
     def get_transactions_dest_account(self, account_id: str) -> list:
+        """
+        Retrieves all transactions sent to a specific target account Id
+
+        :param account_id: Destination account identifier
+        :return: List of transaction records as dictionaries
+        """
 
         connection = mysql.connector.connect(**self.config)
         query = 'SELECT * FROM transactions WHERE nameDest = %s'
@@ -104,7 +135,14 @@ class MySQLTransactions:
 
         return json_output
 
-    def create_user(self, username, hashed_password):
+    def create_user(self, username: str, hashed_password: str) -> None:
+        """
+        Inserts a new api user and their hashed password into the db
+
+        :param username: username of the user
+        :param hashed_password: the hashed password string
+        :return:
+        """
 
         connection = mysql.connector.connect(**self.config)
         cursor = connection.cursor()
@@ -116,7 +154,13 @@ class MySQLTransactions:
         cursor.close()
         connection.close()
 
-    def get_user_by_username(self, username):
+    def get_user_by_username(self, username: str) -> str:
+        """
+        Fetches the stored hashed password for a given username.
+
+        :param username: The username to look for
+        :return: The hashed password string
+        """
 
         connection = mysql.connector.connect(**self.config)
         cursor = connection.cursor()

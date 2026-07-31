@@ -1,27 +1,29 @@
 import csv
-import itertools
 import time
 
-from collections.abc import Generator
 from core.domain.base import BaseIngestor
 
 class BatchIngestor(BaseIngestor):
     """
     Concrete ingestor engine class for ingesting 'batch' transaction data coming from a CSV.
+    Used as a context manager to safely open and stream CSV records row by row without loading
+    the entire file into memory
 
-    This concrete version of the BaseIngestor abstract base class specifies
-    how batch or static data has to be ingested. It can be used as a context
-    manager and offers a graceful file exit. The data is presented to the caller
-    via a generator object that can be iterated through.
-
-    Args:
-        None
     Attributes:
-        None
+        data_source (str): File path to the target CSV file
+        throttle (bool): If True: adds a 0.1s pause between yielded rows
+        file_handle: The open file stream
+        reader: Reader object mapping CSV rows to dicts
 
     """
 
     def __init__(self, data_source: str, throttle: bool = True):
+        """
+        Initializes the CSV batch ingestor configuration
+
+        :param data_source: File path to the CSV
+        :param throttle: Whether to delay row iteration or not
+        """
         self.data_source = data_source
         self.throttle = throttle
         self.file_handle = None
@@ -29,8 +31,10 @@ class BatchIngestor(BaseIngestor):
 
     def __enter__(self):
         """
-        Allows transaction data to be accessed via a context manager. 
-        Sets the parameters to be passed to the terminal/MySQL shell.
+        Opens the CSV file source and initializes the reader object
+
+        :return: The BatchIngestor context instance
+        :raises FileNotFoundError: If the CSV file path does not exist
         """
         print('Connecting to data source...')
         try:
@@ -44,13 +48,10 @@ class BatchIngestor(BaseIngestor):
 
     def get_transactions(self):
         """
-        Generator that yields each row of the transactions table from a mysql db.
-        It defines no .send method or finishing return statement.
-
+        Generates transaction dictionaries from the opened CSV source
 
         Yields:
-            A generator object that can iterate through the rows of
-            the batch/static data.
+            dict: A dictionary representing a single CSV row, (keys correspond to CSV column names)
         """
         for row in self.reader:
             if self.throttle:
@@ -59,6 +60,7 @@ class BatchIngestor(BaseIngestor):
             yield row
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
+        """Ensure the CSV file source is safely closed upon exiting"""
         if self.file_handle:
             print('Closing connection to CSV source.')
             self.file_handle.close()
