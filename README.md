@@ -33,10 +33,9 @@ then replace the sample csv file. Make sure to change references to the file in 
 init-scripts and the reference to the data set in main.py.
 
 ## Architecture
-
-<div align="center">
+<div align="left">
   <h2></h2>
-  <img src="docs/Argus-Arch-Diagram.png" alt="Argus Architecture" width="350"/>
+  <img src="docs/Argus-Arch-Diagram.png" alt="Argus Architecture" width="450"/>
 </div>
 
 ## Motivation
