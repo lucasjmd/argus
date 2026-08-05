@@ -32,6 +32,12 @@ For the full dataset I used during this project, please visit: https://www.kaggl
 then replace the sample csv file. Make sure to change references to the file in the <code>01-init.sql</code> file in
 init-scripts and the reference to the data set in main.py.
 
+## Architecture
+
+<div align="center">
+  <h2></h2>
+  <img src="docs/Argus-Arch-Diagram.png" alt="Argus Architecture" width="350"/>
+</div>
 
 ## Motivation
 
