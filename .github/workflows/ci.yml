@@ -16,7 +16,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: argus
+          MYSQL_DATABASE: paysim
         ports:
           - 3306:3306
         options: >-
@@ -48,14 +48,14 @@ jobs:
       - name: Initialize database schema
         run: |
           for file in ./init-scripts/*.sql; do
-            [ -f "$file" ] && mysql -h 127.0.0.1 -u root -prootpassword argus < "$file"
+            [ -f "$file" ] && mysql -h 127.0.0.1 -u root -prootpassword paysim < "$file"
           done
 
       - name: Run pytest
         env:
           MYSQL_HOST: 127.0.0.1
           MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: argus
+          MYSQL_DATABASE: paysim
         run: uv run pytest
 
   docker-build:
