@@ -29,6 +29,9 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/core", "src/api"]
 
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
@@ -37,7 +40,7 @@ dev = [
 ]
 
 [tool.ruff]
-line-length = 80
+line-length = 100
 
 [tool.ruff.format]
 quote-style = 'single'
@@ -64,6 +67,9 @@ extend-select = [
     "TD005",
     "TD006",
     "TD007",
-
+]
+ignore = [
+    'E501',
+    'N815'
 ]
 

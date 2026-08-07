@@ -47,6 +47,9 @@ services:
     networks:
       - argus-network
 
+    volumes:
+      - .:/argus
+
   # API SERVICE
   api:
     build: .

@@ -1,9 +1,11 @@
 import uuid
+
 import pytest
 from fastapi.testclient import TestClient
 
 # Import our FastAPI app instance
 from src.api.routes import app
+
 
 @pytest.fixture
 def client():
@@ -29,6 +31,7 @@ def random_user():
 
 # PUBLIC ROUTES
 
+
 def test_root_endpoint(client):
     """
     Verifies that the root is reachable .
@@ -38,6 +41,7 @@ def test_root_endpoint(client):
 
 
 # AUTH
+
 
 def test_register_user_success(client, random_user):
     """
@@ -51,12 +55,13 @@ def test_login_invalid_credentials(client):
     """
     Checks if non valid credentials are rejected
     """
-    payload = {'username': 'nonexistent@example.com', 'password' : 'wrongpassword'}
+    payload = {'username': 'nonexistent@example.com', 'password': 'wrongpassword'}
     response = client.post('/login', data=payload)
     assert response.status_code in (400, 401)
 
 
 # PROTECTED ROUTES
+
 
 def test_protected_route_unauthorized_without_token(client):
     """
@@ -95,6 +100,6 @@ def test_full_auth_and_protected_access_flow(client, random_user):
     assert 'access_token' in token_data
 
     # 3. Access protected route
-    headers = {'Authorization': f'Bearer {token_data['access_token']}'}
+    headers = {'Authorization': f'Bearer {token_data["access_token"]}'}
     protected_response = client.get('/transactions', headers=headers)
     assert protected_response.status_code == 200

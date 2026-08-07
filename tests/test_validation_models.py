@@ -1,6 +1,7 @@
+from decimal import Decimal
+
 import pytest
 from pydantic import ValidationError
-from decimal import Decimal
 
 from core.domain.validation_models import Transaction
 
@@ -19,6 +20,7 @@ VALID_TEST_TX = {
     'isFlaggedFraud': '0',
 }
 
+
 def test_incorrect_account():
     """
     Ensure that invalid orig and dest account formats are caught
@@ -33,6 +35,7 @@ def test_incorrect_account():
     with pytest.raises(ValidationError):
         Transaction(**bad_dest)
 
+
 def test_empty_string():
     """
     Ensure that an empty string in a required text field is caught
@@ -40,7 +43,8 @@ def test_empty_string():
     bad_data = VALID_TEST_TX.copy()
     bad_data['type'] = ''
     with pytest.raises(ValidationError):
-        tx = Transaction(**bad_data)
+        Transaction(**bad_data)
+
 
 def test_missing_field():
     """
@@ -49,7 +53,8 @@ def test_missing_field():
     bad_data = VALID_TEST_TX.copy()
     bad_data['oldbalanceOrg'] = None
     with pytest.raises(ValidationError):
-        tx = Transaction(**bad_data)
+        Transaction(**bad_data)
+
 
 def test_incorrect_type():
     """
@@ -58,7 +63,8 @@ def test_incorrect_type():
     bad_data = VALID_TEST_TX.copy()
     bad_data['step'] = 'shouldBeInt'
     with pytest.raises(ValidationError):
-        tx = Transaction(**bad_data)
+        Transaction(**bad_data)
+
 
 def test_simple_row_pass():
     """

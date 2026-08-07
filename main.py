@@ -1,7 +1,7 @@
-import sys
 from pathlib import Path
 
 from core.application.orchestration import TransactionValidationPipeline
+
 
 def main():
     """
@@ -12,6 +12,7 @@ def main():
     pipeline = TransactionValidationPipeline(data_source=str(csv_path))
 
     pipeline.run_pipeline()
+
 
 if __name__ == '__main__':
     main()

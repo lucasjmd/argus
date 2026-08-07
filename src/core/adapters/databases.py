@@ -1,5 +1,6 @@
-import mysql.connector
 import os
+
+import mysql.connector
 import pandas as pd
 
 from core.domain.validation_models import Transaction
@@ -19,7 +20,7 @@ class MySQLTransactions:
             'user': 'root',
             'password': os.getenv('MYSQL_ROOT_PASSWORD'),
             'database': os.getenv('MYSQL_DATABASE'),
-            'host': os.getenv('MYSQL_HOST')
+            'host': os.getenv('MYSQL_HOST'),
         }
 
     def save_batch(self, transactions: list[Transaction]) -> None:
@@ -41,18 +42,27 @@ class MySQLTransactions:
         # Maps objects to raw database tuples
         values = [
             (
-                tx.step, tx.type, tx.amount, tx.nameOrig, float(tx.oldbalanceOrg),
-                float(tx.newbalanceOrig), tx.nameDest, float(tx.oldbalanceDest),
-                float(tx.newbalanceDest), tx.isFraud, tx.isFlaggedFraud
+                tx.step,
+                tx.type,
+                tx.amount,
+                tx.nameOrig,
+                float(tx.oldbalanceOrg),
+                float(tx.newbalanceOrig),
+                tx.nameDest,
+                float(tx.oldbalanceDest),
+                float(tx.newbalanceDest),
+                tx.isFraud,
+                tx.isFlaggedFraud,
             )
             for tx in transactions
         ]
 
-        cursor.executemany(query, values) # batch flushing to db, avoids individual network traffic per tx
+        cursor.executemany(
+            query, values
+        )  # batch flushing to db, avoids individual network traffic per tx
         conn.commit()
         cursor.close()
         conn.close()
-
 
     def get_transactions(self, page: int = 1, limit: int = 50) -> list:
         """
@@ -74,13 +84,11 @@ class MySQLTransactions:
             OFFSET %s
         """
 
-        df = pd.read_sql(query, con = connection, params = [limit, offset])
+        df = pd.read_sql(query, con=connection, params=[limit, offset])
 
         connection.close()
 
-        json_output = df.to_dict(orient='records')
-
-        return json_output
+        return df.to_dict(orient='records')
 
     def get_transactions_above_amount(self, value: float) -> list:
         """
@@ -94,13 +102,11 @@ class MySQLTransactions:
 
         query = 'SELECT * FROM transactions WHERE amount >= %s'
 
-        df = pd.read_sql(query, con = connection, params = [value])
+        df = pd.read_sql(query, con=connection, params=[value])
 
         connection.close()
 
-        json_output = df.to_dict(orient='records')
-
-        return json_output
+        return df.to_dict(orient='records')
 
     def get_transactions_orig_account(self, account_id: str) -> list:
         """
@@ -112,11 +118,9 @@ class MySQLTransactions:
 
         connection = mysql.connector.connect(**self.config)
         query = 'SELECT * FROM transactions WHERE nameOrig = %s'
-        df = pd.read_sql(query, con = connection, params = [account_id])
+        df = pd.read_sql(query, con=connection, params=[account_id])
         connection.close()
-        json_output = df.to_dict(orient='records')
-
-        return json_output
+        return df.to_dict(orient='records')
 
     def get_transactions_dest_account(self, account_id: str) -> list:
         """
@@ -128,12 +132,10 @@ class MySQLTransactions:
 
         connection = mysql.connector.connect(**self.config)
         query = 'SELECT * FROM transactions WHERE nameDest = %s'
-        df = pd.read_sql(query, con = connection, params=[account_id])
+        df = pd.read_sql(query, con=connection, params=[account_id])
         connection.close()
 
-        json_output = df.to_dict(orient='records')
-
-        return json_output
+        return df.to_dict(orient='records')
 
     def create_user(self, username: str, hashed_password: str) -> None:
         """
@@ -175,9 +177,6 @@ class MySQLTransactions:
         connection.close()
 
         if row:
-            hashed_password = row[0]
-            return hashed_password
+            return row[0]
 
-        else:
-            return None
-
+        return None

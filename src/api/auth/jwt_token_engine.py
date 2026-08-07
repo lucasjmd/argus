@@ -1,14 +1,16 @@
-from jose import jwt, JWTError
-from dotenv import load_dotenv
-from datetime import datetime, timedelta, timezone
 import os
+from datetime import UTC, datetime, timedelta
+
+from dotenv import load_dotenv
+from jose import jwt
 
 load_dotenv()
 
-#JWT configuration settings from environment
-SECRET = os.getenv('JWT_SECRET') # cryptographic signature key
+# JWT configuration settings from environment
+SECRET = os.getenv('JWT_SECRET')  # cryptographic signature key
 EXPIRE = os.getenv('JWT_EXPIRY_SECONDS')
 ALGO = os.getenv('JWT_ALGORITHM')
+
 
 def create_jwt(data: dict) -> str:
     """
@@ -20,14 +22,13 @@ def create_jwt(data: dict) -> str:
 
     payload = data.copy()
     # opted for UTC to avoid timezone token issues
-    expiry_dt = datetime.now(timezone.utc)
+    expiry_dt = datetime.now(UTC)
 
     expire_td = timedelta(seconds=int(EXPIRE))
     payload['exp'] = expiry_dt + expire_td
 
-    token = jwt.encode(payload, SECRET, algorithm=ALGO)
+    return jwt.encode(payload, SECRET, algorithm=ALGO)
 
-    return token
 
 def decode_jwt(token: str) -> dict:
     """
@@ -39,4 +40,3 @@ def decode_jwt(token: str) -> dict:
     :raises JWTError: If signature doesnt match
     """
     return jwt.decode(token, SECRET, algorithms=[ALGO])
-

@@ -1,9 +1,11 @@
 import itertools
+
 from pydantic import ValidationError
 
+from core.adapters.databases import MySQLTransactions
 from core.adapters.ingestors import BatchIngestor
 from core.domain.validation_models import Transaction
-from core.adapters.databases import MySQLTransactions
+
 
 class TransactionValidationPipeline:
     """
@@ -30,8 +32,7 @@ class TransactionValidationPipeline:
         """
         Executes loop: reads CSV rows, validates schema compliance, and flushes valid records to db in chunks.
         """
-        with BatchIngestor(data_source = self.data_source, throttle=False) as ingestor:
-
+        with BatchIngestor(data_source=self.data_source, throttle=False) as ingestor:
             raw_gen_obj = ingestor.get_transactions()
 
             for raw_chunk in itertools.batched(raw_gen_obj, self.batch_size):
@@ -50,5 +51,5 @@ class TransactionValidationPipeline:
 
 
 if __name__ == '__main__':
-    pipeline = FraudDetectionPipeline(data_source='paysim_data/paysim_dataset.csv')
+    pipeline = TransactionValidationPipeline(data_source='paysim_data/paysim_dataset.csv')
     pipeline.run_pipeline()

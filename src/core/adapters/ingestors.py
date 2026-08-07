@@ -1,7 +1,9 @@
 import csv
 import time
+from pathlib import Path
 
 from core.domain.base import BaseIngestor
+
 
 class BatchIngestor(BaseIngestor):
     """
@@ -38,7 +40,7 @@ class BatchIngestor(BaseIngestor):
         """
         print('Connecting to data source...')
         try:
-            self.file_handle = open(self.data_source, mode='r', encoding='utf-8')
+            self.file_handle = Path(self.data_source).open(mode='r', encoding='utf-8')
         except FileNotFoundError:
             print('Could not data source file.')
             raise
@@ -69,10 +71,11 @@ class BatchIngestor(BaseIngestor):
             print(f'Reading file interrupted due to error: {exc_value}')
             return False
 
+        return False
+
 
 if __name__ == '__main__':
     csv_path = 'paysim_data/paysim_dataset.csv'
     with BatchIngestor(data_source=csv_path, throttle=True) as batch:
         for tx in batch.get_transactions():
             print(tx)
-
