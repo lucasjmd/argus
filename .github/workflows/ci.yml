@@ -10,6 +10,9 @@ jobs:
   linter-and-tester:
     name: Runs linters and Pytest
     runs-on: ubuntu-latest
+    env:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: argus
 
     steps:
       - name: Checkout
@@ -31,8 +34,11 @@ jobs:
       - name: Run ruff
         run: uv run ruff check .
 
+      - name: Start docker dompose
+        run: docker compose up -d --wait
+
       - name: Run pytest
-        run: uv run pytest
+        run: docker compose exec -T api uv run pytest
 
   docker-build:
     name: Docker image build
