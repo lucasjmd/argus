@@ -57,6 +57,9 @@ jobs:
           MYSQL_ROOT_PASSWORD: rootpassword
           MYSQL_DATABASE: paysim
           MYSQL_PORT: '3306'
+          JWT_SECRET: 'ci-test-secret-12345'
+          JWT_EXPIRY_SECONDS: '60'
+          JWT_ALGORITHM: 'HS256'
         run: uv run pytest
 
   docker-build:
