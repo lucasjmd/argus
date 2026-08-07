@@ -34,7 +34,7 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Setup Python
+      - name: Setup python312
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -45,6 +45,12 @@ jobs:
       - name: Run linter
         run: uv run ruff check .
 
+      - name: Initialize database schema
+        run: |
+          for file in ./init-scripts/*.sql; do
+            [ -f "$file" ] && mysql -h 127.0.0.1 -u root -prootpassword argus < "$file"
+          done
+
       - name: Run pytest
         env:
           MYSQL_HOST: 127.0.0.1
@@ -53,7 +59,7 @@ jobs:
         run: uv run pytest
 
   docker-build:
-    name: Docker Build Check
+    name: Docker build check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
