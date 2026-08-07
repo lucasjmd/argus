@@ -1,4 +1,4 @@
---Database initialisation for argus transaction validator engine
+-- Database initialisation for argus transaction validator engine
 CREATE DATABASE IF NOT EXISTS paysim;
 USE paysim;
 
