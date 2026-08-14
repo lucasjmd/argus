@@ -17,8 +17,13 @@ transactions and user analytics.
 
 
 ## Quick setup
-1. Create an <code>.env</code> file at the root and add your <code>MYSQL_ROOT_PASSWORD</code> and <br> 
-<code>MYSQL_DATABASE</code> variables.
+1. Create an <code>.env</code> file at the root and add the following variables:
+* <code>MYSQL_ROOT_PASSWORD</code> 
+* <code>MYSQL_DATABASE</code>
+* <code>MYSQL_HOST</code> 
+* <code>JWT_SECRET</code>
+* <code>JWT_EXPIRY_SECONDS</code>
+* <code>JWT_ALGORITHM</code>
 2. ```markdown
    docker compose up --build
    ```
@@ -32,14 +37,21 @@ init-scripts and the reference to the data set in main.py.
   <img src="docs/Argus-Arch-Diagram.png" alt="Argus Architecture" width="450"/>
 </div>
 
+## Demo
+Quick GIF showing me attempting to access a non-protected route and then a protected route while not being authenticated.
+![API Demo 1](docs/clip1.gif)
+
+And here I authenticate myself and then retry one of the protected routes.
+![API Demo 2](docs/clip2.gif)
+
+
 ## Motivation
 
 Argus is a technical sandbox which allows me to experiment with building high-throughput data pipelines in my free time.
 The main motivation is for me to improve my software engineering skills and play around with various tools and designs.
 
 While my previous projects focussed on implementing certain logic or building proof-of-concept tools,<br>
-Argus focusses on good engineering practices, like defensive programming (e.g. Pydantic) and architectural design<br>
-(e.g. decoupling logic from data source).
+Argus focusses on good engineering practices, like defensive programming (e.g. Pydantic) and architectural design (e.g. decoupling logic from data source).
 
 ## Author
 I'm Lucas, a data engineer based in The Netherlands. I have a background in statistics and programming and 
