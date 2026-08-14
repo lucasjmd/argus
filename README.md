@@ -1,25 +1,20 @@
 # Argus
 ![Python](https://img.shields.io/badge/Python-3.12+-blue?logo=python&logoColor=white)
 ![Validation](https://img.shields.io/badge/Validation-Pydantic_V2-red?logo=pydantic)<br>
-> *"The thousand eyes of sacred Argus, which he kept but in alternate watchfulness,* 
-> *nor even waked in all his frame at once."* - Statius, Silvae
 
-**Argus is an end-to-end, high-performance financial transaction validation engine.<br>**
-It was built with a focus on using data contracts for ensuring type and schema consistency<br>
-in an effort to ensure financial transaction data is clean and validated for use machine learning<br>
-models for fraud detection purposes (will be added later).
+**Argus is an end-to-end, high-performance financial transaction validation engine and REST API.<br>**
+Build around strict data contracts for ensuring schema and type consistency.<br>
+rgus sanitizes raw financial data, persists validated records, and exposes JWT-authenticated endpoints for exploring 
+transactions and user analytics.
 
 ## Highlights
 
-* Native support for both batch data and live stream data
-* Built-in resource management to ensure safe file/stream handling
-* Powered by Pydantic V2 for sub-millisecond validation
-* Abstract-base classes decouple logic from data, making it easy to plug-and-play with new<br>
-data sources (SQL db's, Kafka, etc.)
+* **Strict data contracts** powered by Pydantic for sub-millisecond validation.
+* **JWT authentication** for secure user registration, authentication, and token-protected API endpoints.
+* **REST API endpoints** to query transaction history and fetch user summaries.
+* **Extensible Architecture** via abstract base classes to decouple core business logic from data sources, making it simple to plug in new storage layers or input sources
+* **Automated CI/CD Pipeline** testing with `pytest` and `ruff` on every commit, with automated Docker builds published to GitHub container registry.
 
-## Overview
-Under construction...
-<br>
 
 ## Quick setup
 1. Create an <code>.env</code> file at the root and add your <code>MYSQL_ROOT_PASSWORD</code> and <br> 
